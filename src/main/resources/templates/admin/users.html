@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <div th:replace="fragments/header :: header"></div>
+  <title>Пользователи</title>
+</head>
+<body>
+
+<h2>Список пользователей</h2>
+<table border="1">
+  <tr>
+    <th>ID</th>
+    <th>Логин</th>
+    <th>Роль</th>
+  </tr>
+  <tr th:each="u : ${users}">
+    <td th:text="${u.userId}"></td>
+    <td th:text="${u.username}"></td>
+    <td th:text="${u.role}"></td>
+  </tr>
+</table>
+
+<h3>Добавить пользователя</h3>
+
+<form th:action="@{/users}" method="post">
+  <input type="text" name="username" placeholder="Логин" required>
+  <input type="text" name="passwordHash" placeholder="Пароль" required>
+  <select name="role">
+    <option value="ROLE_ADMIN">ADMIN</option>
+    <option value="ROLE_OPERATOR">OPERATOR</option>
+    <option value="ROLE_DRIVER">DRIVER</option>
+  </select>
+  <button type="submit">Сохранить</button>
+</form>
+</body>
+</html>

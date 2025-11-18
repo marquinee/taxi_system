@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Заказы</title>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<h2>Список заказов</h2>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Клиент</th>
+        <th>Водитель</th>
+        <th>Откуда</th>
+        <th>Куда</th>
+        <th>Цена</th>
+        <th>Статус</th>
+        <th>Создан</th>
+    </tr>
+
+    <tr th:each="o : ${orders}">
+        <td th:text="${o.orderId}"></td>
+        <td th:text="${o.client.fullName}"></td>
+        <td th:text="${o.driver != null ? o.driver.fullName : '-'}"></td>
+        <td th:text="${o.pickupAddress}"></td>
+        <td th:text="${o.destinationAddress}"></td>
+        <td th:text="${o.price}"></td>
+        <td th:text="${o.status}"></td>
+        <td th:text="${o.createdAt}"></td>
+    </tr>
+</table>
+
+<h3>Создать новый заказ</h3>
+
+<form method="post" th:action="@{/operator/orders}" th:object="${newOrder}">
+
+    <label>Клиент:</label>
+    <select name="clientId" required>
+        <option value="">Выберите клиента</option>
+        <option th:each="c : ${clients}"
+                th:value="${c.clientId}"
+                th:text="${c.fullName + ' (' + c.phoneNumber + ')'}">
+        </option>
+    </select>
+    <br><br>
+
+    <label>Водитель (необязательно):</label>
+    <select name="driverId">
+        <option value="">-- Не назначен --</option>
+        <option th:each="d : ${drivers}"
+                th:value="${d.driverId}"
+                th:text="${d.fullName}">
+        </option>
+    </select>
+    <br><br>
+
+    <input type="text" th:field="*{pickupAddress}" placeholder="Адрес подачи" required>
+    <input type="text" th:field="*{destinationAddress}" placeholder="Адрес назначения" required>
+    <input type="number" step="0.01" th:field="*{price}" placeholder="Цена" required>
+
+    <button type="submit">Создать заказ</button>
+</form>
+
+<br>
+<a th:href="@{/operator/dashboard}">Назад</a>
+
+</body>
+</html>

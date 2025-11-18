@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Клиенты</title>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<h2>Список клиентов</h2>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>ФИО</th>
+        <th>Телефон</th>
+        <th>Дата регистрации</th>
+        <th>Заметки</th>
+    </tr>
+
+    <tr th:each="c : ${clients}">
+        <td th:text="${c.clientId}"></td>
+        <td th:text="${c.fullName}"></td>
+        <td th:text="${c.phoneNumber}"></td>
+        <td th:text="${c.registrationDate}"></td>
+        <td th:text="${c.notes}"></td>
+    </tr>
+</table>
+
+<h3>Добавить клиента</h3>
+
+<form method="post" th:action="@{/operator/clients}" th:object="${newClient}">
+    <input type="text" th:field="*{fullName}" placeholder="ФИО" required>
+    <input type="text" th:field="*{phoneNumber}" placeholder="Телефон" required>
+    <input type="date" th:field="*{registrationDate}" placeholder="Дата регистрации">
+    <input type="text" th:field="*{notes}" placeholder="Заметки">
+    <button type="submit">Сохранить</button>
+</form>
+
+<br>
+<a th:href="@{/operator/dashboard}">Вернуться назад</a>
+
+</body>
+</html>
