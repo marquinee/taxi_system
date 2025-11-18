@@ -2,12 +2,15 @@ package com.example.taxi_system.controller;
 
 import com.example.taxi_system.entity.Client;
 import com.example.taxi_system.entity.Order;
+import com.example.taxi_system.entity.OrderStatus;
 import com.example.taxi_system.service.ClientService;
 import com.example.taxi_system.service.DriverService;
 import com.example.taxi_system.service.OrderService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/operator")
@@ -60,6 +63,22 @@ public class OperatorController {
 
         if (driverId != null)
             order.setDriver(driverService.findById(driverId));
+
+        orderService.save(order);
+
+        return "redirect:/operator/orders";
+    }
+
+    @PostMapping("/orders/{id}/status")
+    public String updateStatus(@PathVariable Long id, @RequestParam OrderStatus status) {
+
+        Order order = orderService.findById(id);
+
+        order.setStatus(status);
+
+        if (status == OrderStatus.COMPLETED) {
+            order.setCompletedAt(LocalDateTime.now());
+        }
 
         orderService.save(order);
 

@@ -29,8 +29,20 @@
         <td th:text="${o.pickupAddress}"></td>
         <td th:text="${o.destinationAddress}"></td>
         <td th:text="${o.price}"></td>
-        <td th:text="${o.status}"></td>
         <td th:text="${o.createdAt}"></td>
+        <td>
+            <form th:action="@{'/operator/orders/' + ${o.orderId} + '/status'}" method="post">
+                <select name="status">
+                    <option th:value="NEW" th:selected="${o.status == T(com.example.taxi_system.entity.OrderStatus).NEW}">NEW</option>
+                    <option th:value="ASSIGNED" th:selected="${o.status == T(com.example.taxi_system.entity.OrderStatus).ASSIGNED}">ASSIGNED</option>
+                    <option th:value="IN_PROGRESS" th:selected="${o.status == T(com.example.taxi_system.entity.OrderStatus).IN_PROGRESS}">IN_PROGRESS</option>
+                    <option th:value="COMPLETED" th:selected="${o.status == T(com.example.taxi_system.entity.OrderStatus).COMPLETED}">COMPLETED</option>
+                    <option th:value="CANCELLED" th:selected="${o.status == T(com.example.taxi_system.entity.OrderStatus).CANCELLED}">CANCELLED</option>
+                </select>
+                <button type="submit">OK</button>
+            </form>
+        </td>
+
     </tr>
 </table>
 
