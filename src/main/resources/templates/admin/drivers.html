@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <div th:replace="fragments/header :: header"></div>
-    <title>Водители</title>
-</head>
+<head><meta charset="UTF-8"><title>Водители</title></head>
 <body>
 
-<h2>Список водителей</h2>
+<div th:replace="fragments/header :: header"></div>
+
+<h2>Водители</h2>
+
+<a th:href="@{/admin/drivers/add}">Добавить водителя</a>
+<br><br>
 
 <table border="1">
     <tr>
@@ -15,8 +16,8 @@
         <th>ФИО</th>
         <th>Лицензия</th>
         <th>Телефон</th>
-        <th>Опыт (лет)</th>
-        <th>Статус</th>
+        <th>Стаж (лет)</th>
+        <th>Действия</th>
     </tr>
 
     <tr th:each="d : ${drivers}">
@@ -25,25 +26,15 @@
         <td th:text="${d.licenseNumber}"></td>
         <td th:text="${d.phoneNumber}"></td>
         <td th:text="${d.experienceYears}"></td>
-        <select name="status">
-            <option value="Свободен">Свободен</option>
-            <option value="На заказе">На заказе</option>
-            <option value="Неактивен">Неактивен</option>
-        </select>
+        <td>
+            <a th:href="@{'/admin/drivers/edit/' + ${d.driverId}}">Редактировать</a> |
+            <a th:href="@{'/admin/drivers/delete/' + ${d.driverId}}"
+               onclick="return confirm('Удалить водителя?')">Удалить</a>
+        </td>
     </tr>
 </table>
 
-<h3>Добавить водителя</h3>
-
-<form method="post" th:action="@{/drivers}">
-    <input name="fullName" placeholder="ФИО" required>
-    <input name="licenseNumber" placeholder="Номер лицензии" required>
-    <input name="phoneNumber" placeholder="Телефон">
-    <input name="experienceYears" placeholder="Стаж" type="number">
-    <button type="submit">Сохранить</button>
-</form>
-
-<a th:href="@{/}">На главную</a>
+<a th:href="@{/admin/dashboard}">Назад</a>
 
 </body>
 </html>

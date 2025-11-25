@@ -55,7 +55,7 @@ public class Driver {
         return experienceYears;
     }
 
-    public void setExperience_years(int experienceYears) {
+    public void setExperienceYears(int experienceYears) {
         this.experienceYears = experienceYears;
     }
 
@@ -66,4 +66,5 @@ public class Driver {
     public void setStatus(String status) {
         this.status = status;
     }
+
 }

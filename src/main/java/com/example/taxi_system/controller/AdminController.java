@@ -27,31 +27,4 @@ public class AdminController {
     public String dashboard() {
         return "admin/dashboard";
     }
-
-    @GetMapping("/users")
-    public String users(Model model) {
-        model.addAttribute("users", userService.findAll());
-        model.addAttribute("newUser", new User());
-        return "admin/users";
-    }
-    @PostMapping("/users")
-    public String addUser(@ModelAttribute("newUser") User user) {
-        userService.save(user);
-        return "redirect:/admin/users";
-    }
-
-
-    @GetMapping("/drivers")
-    public String drivers(Model model) {
-        model.addAttribute("drivers", driverService.findAll());
-        model.addAttribute("newDriver", new Driver());
-        return "admin/drivers";
-    }
-    @PostMapping("/drivers")
-    public String addDriver(@ModelAttribute("newDriver") Driver driver) {
-        driverService.save(driver);
-        return "redirect:/admin/drivers";
-    }
-
-
 }

@@ -19,4 +19,8 @@ public class DriverService {
     public Driver findById(Long driverId) {
         return repo.findById(driverId).orElseThrow();
     }
+
+    public void deleteById(Long id) {
+        repo.deleteById(id);
+    }
 }
