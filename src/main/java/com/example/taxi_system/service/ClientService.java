@@ -28,4 +28,7 @@ public class ClientService {
         return repo.findById(clientId).orElseThrow();
     }
 
+    public void deleteById(Long id) {
+        repo.deleteById(id);
+    }
 }

@@ -60,4 +60,5 @@ public class Client {
     public void setNotes(String notes) {
         this.notes = notes;
     }
+
 }

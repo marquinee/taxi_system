@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Заказы</title>
-</head>
+<head><meta charset="UTF-8"><title>Заказы</title></head>
 <body>
 
 <div th:replace="fragments/header :: header"></div>
 
-<h2>Список заказов</h2>
+<h2>Заказы</h2>
+
+<a th:href="@{/operator/orders/add}">Создать заказ</a>
+<br><br>
 
 <table border="1">
     <tr>
@@ -19,7 +19,8 @@
         <th>Куда</th>
         <th>Цена</th>
         <th>Статус</th>
-        <th>Создан</th>
+        <th>Дата</th>
+        <th>Действия</th>
     </tr>
 
     <tr th:each="o : ${orders}">
@@ -29,55 +30,56 @@
         <td th:text="${o.pickupAddress}"></td>
         <td th:text="${o.destinationAddress}"></td>
         <td th:text="${o.price}"></td>
+        <td th:text="${o.status}"></td>
         <td th:text="${o.createdAt}"></td>
         <td>
-            <form th:action="@{'/operator/orders/' + ${o.orderId} + '/status'}" method="post">
-                <select name="status">
-                    <option th:value="NEW" th:selected="${o.status == T(com.example.taxi_system.entity.OrderStatus).NEW}">NEW</option>
-                    <option th:value="ASSIGNED" th:selected="${o.status == T(com.example.taxi_system.entity.OrderStatus).ASSIGNED}">ASSIGNED</option>
-                    <option th:value="IN_PROGRESS" th:selected="${o.status == T(com.example.taxi_system.entity.OrderStatus).IN_PROGRESS}">IN_PROGRESS</option>
-                    <option th:value="COMPLETED" th:selected="${o.status == T(com.example.taxi_system.entity.OrderStatus).COMPLETED}">COMPLETED</option>
-                    <option th:value="CANCELLED" th:selected="${o.status == T(com.example.taxi_system.entity.OrderStatus).CANCELLED}">CANCELLED</option>
-                </select>
-                <button type="submit">OK</button>
+
+            <!-- Назначить водителя -->
+            <a th:if="${o.status.name() == 'NEW'}"
+               th:href="@{'/operator/orders/edit/' + ${o.orderId}}">
+                <button type="submit">Назначить</button>
+            </a><br>
+
+            <!-- Начать поездку -->
+            <form th:if="${o.status.name() == 'ASSIGNED'}"
+                  th:action="@{'/operator/orders/' + ${o.orderId} + '/setStatus'}"
+                  method="post">
+                <input type="hidden" name="status" value="IN_PROGRESS">
+                <button type="submit">Начать</button>
             </form>
+
+            <!-- Завершить -->
+            <form th:if="${o.status.name() == 'IN_PROGRESS'}"
+                  th:action="@{'/operator/orders/' + ${o.orderId} + '/setStatus'}"
+                  method="post">
+                <input type="hidden" name="status" value="COMPLETED">
+                <button type="submit">Завершить</button>
+            </form>
+
+            <!-- Отменить -->
+            <form th:if="${o.status.name() != 'COMPLETED'}"
+                  th:action="@{'/operator/orders/' + ${o.orderId} + '/setStatus'}"
+                  method="post">
+                <input type="hidden" name="status" value="CANCELLED">
+                <button type="submit"
+                        onclick="return confirm('Отменить заказ?')">
+                    Отменить
+                </button>
+            </form>
+
+            <!-- Стандартные действия -->
+            <br>
+            <a th:href="@{'/operator/orders/edit/' + ${o.orderId}}">Редактировать</a> |
+            <a th:href="@{'/operator/orders/delete/' + ${o.orderId}}"
+               onclick="return confirm('Удалить заказ?')">
+                Удалить
+            </a>
+
         </td>
 
     </tr>
 </table>
 
-<h3>Создать новый заказ</h3>
-
-<form method="post" th:action="@{/operator/orders}" th:object="${newOrder}">
-
-    <label>Клиент:</label>
-    <select name="clientId" required>
-        <option value="">Выберите клиента</option>
-        <option th:each="c : ${clients}"
-                th:value="${c.clientId}"
-                th:text="${c.fullName + ' (' + c.phoneNumber + ')'}">
-        </option>
-    </select>
-    <br><br>
-
-    <label>Водитель (необязательно):</label>
-    <select name="driverId">
-        <option value="">-- Не назначен --</option>
-        <option th:each="d : ${drivers}"
-                th:value="${d.driverId}"
-                th:text="${d.fullName}">
-        </option>
-    </select>
-    <br><br>
-
-    <input type="text" th:field="*{pickupAddress}" placeholder="Адрес подачи" required>
-    <input type="text" th:field="*{destinationAddress}" placeholder="Адрес назначения" required>
-    <input type="number" step="0.01" th:field="*{price}" placeholder="Цена" required>
-
-    <button type="submit">Создать заказ</button>
-</form>
-
-<br>
 <a th:href="@{/operator/dashboard}">Назад</a>
 
 </body>

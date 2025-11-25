@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Клиент</title></head>
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<h2 th:text="${client.clientId == null ? 'Добавить клиента' : 'Редактировать клиента'}"></h2>
+
+<form th:action="@{${actionUrl}}" th:object="${client}" method="post">
+
+    <label>ФИО:</label>
+    <input type="text" th:field="*{fullName}" required><br><br>
+
+    <label>Телефон:</label>
+    <input type="text" th:field="*{phoneNumber}" required><br><br>
+
+    <label>Дата регистрации:</label>
+    <input type="date" th:field="*{registrationDate}"><br><br>
+
+    <label>Заметки:</label>
+    <input type="text" th:field="*{notes}"><br><br>
+
+    <button type="submit">Сохранить</button>
+</form>
+
+<a th:href="@{/operator/clients}">Отмена</a>
+
+</body>
+</html>

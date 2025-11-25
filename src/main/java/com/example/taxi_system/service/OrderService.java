@@ -5,6 +5,7 @@ import com.example.taxi_system.entity.OrderStatus;
 import com.example.taxi_system.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -31,5 +32,19 @@ public class OrderService {
     public Order findById(Long id) {
         return repo.findById(id).orElseThrow();
     }
+
+    public void deleteById(Long id) {
+        repo.deleteById(id);
+    }
+    public void updateStatus(Order order, OrderStatus status) {
+        order.setStatus(status);
+
+        if (status == OrderStatus.COMPLETED) {
+            order.setCompletedAt(LocalDateTime.now());
+        }
+
+        repo.save(order);
+    }
+
 }
 

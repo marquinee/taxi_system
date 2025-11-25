@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Клиенты</title>
-</head>
+<head><meta charset="UTF-8"><title>Клиенты</title></head>
 <body>
 
 <div th:replace="fragments/header :: header"></div>
 
-<h2>Список клиентов</h2>
+<h2>Клиенты</h2>
+
+<a th:href="@{/operator/clients/add}">Добавить клиента</a>
+<br><br>
 
 <table border="1">
     <tr>
@@ -25,21 +25,16 @@
         <td th:text="${c.phoneNumber}"></td>
         <td th:text="${c.registrationDate}"></td>
         <td th:text="${c.notes}"></td>
+        <td>
+            <a th:href="@{'/operator/clients/edit/' + ${c.clientId}}">Редактировать</a> |
+            <a th:href="@{'/operator/clients/delete/' + ${c.clientId}}"
+               onclick="return confirm('Удалить клиента?')">Удалить</a>
+        </td>
     </tr>
 </table>
 
-<h3>Добавить клиента</h3>
-
-<form method="post" th:action="@{/operator/clients}" th:object="${newClient}">
-    <input type="text" th:field="*{fullName}" placeholder="ФИО" required>
-    <input type="text" th:field="*{phoneNumber}" placeholder="Телефон" required>
-    <input type="date" th:field="*{registrationDate}" placeholder="Дата регистрации">
-    <input type="text" th:field="*{notes}" placeholder="Заметки">
-    <button type="submit">Сохранить</button>
-</form>
-
 <br>
-<a th:href="@{/operator/dashboard}">Вернуться назад</a>
+<a th:href="@{/operator/dashboard}">Назад</a>
 
 </body>
 </html>
