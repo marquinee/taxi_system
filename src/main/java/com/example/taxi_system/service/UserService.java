@@ -16,11 +16,19 @@ public class UserService {
         this.repo = repo;
         this.encoder = encoder;
     }
-    public List<User> findAll() {
-        return repo.findAll();
-    }
     public User save(User user) {
         user.setPasswordHash(encoder.encode(user.getPasswordHash()));
         return repo.save(user);
+    }
+    public List<User> findAll() {
+        return repo.findAll();
+    }
+
+    public User findById(Long id) {
+        return repo.findById(id).orElseThrow();
+    }
+
+    public void deleteById(Long id) {
+        repo.deleteById(id);
     }
 }
