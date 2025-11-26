@@ -23,6 +23,9 @@ public class ClientService {
     public Optional<Client> findByPhoneNumber(String phoneNumber) {
         return repo.findByPhoneNumber(phoneNumber);
     }
+    public List<Client> findActive() {
+        return repo.findByActiveTrue();
+    }
 
     public Client findById(Long clientId) {
         return repo.findById(clientId).orElseThrow();

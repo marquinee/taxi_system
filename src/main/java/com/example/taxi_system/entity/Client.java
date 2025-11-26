@@ -20,6 +20,7 @@ public class Client {
     private LocalDate registrationDate;
 
     private String notes;
+    private boolean active = true;
 
     public Long getClientId() {
         return clientId;
@@ -61,4 +62,11 @@ public class Client {
         this.notes = notes;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }

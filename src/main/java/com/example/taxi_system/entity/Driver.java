@@ -18,6 +18,7 @@ public class Driver {
     @Column(name = "experience_years")
     private int experienceYears;
     private String status;
+    private boolean active = true;
 
     public String getFullName() {
         return fullName;
@@ -67,4 +68,11 @@ public class Driver {
         this.status = status;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }

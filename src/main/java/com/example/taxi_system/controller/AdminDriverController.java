@@ -18,7 +18,7 @@ public class AdminDriverController {
 
     @GetMapping
     public String list(Model model) {
-        model.addAttribute("drivers", driverService.findAll());
+        model.addAttribute("drivers", driverService.findActive());
         return "admin/drivers";
     }
 
@@ -59,9 +59,11 @@ public class AdminDriverController {
         return "redirect:/admin/drivers";
     }
 
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Long id) {
-        driverService.deleteById(id);
+    @GetMapping("/deactivate/{id}")
+    public String deactivate(@PathVariable Long id) {
+        Driver driver = driverService.findById(id);
+        driver.setActive(false);
+        driverService.save(driver);
         return "redirect:/admin/drivers";
     }
 }

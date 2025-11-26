@@ -27,8 +27,8 @@
         <td th:text="${c.notes}"></td>
         <td>
             <a th:href="@{'/operator/clients/edit/' + ${c.clientId}}">Редактировать</a> |
-            <a th:href="@{'/operator/clients/delete/' + ${c.clientId}}"
-               onclick="return confirm('Удалить клиента?')">Удалить</a>
+            <a th:href="@{'/operator/clients/deactivate/' + ${c.clientId}}"
+               onclick="return confirm('Добавить клиента в архив?')">В архив</a>
         </td>
     </tr>
 </table>

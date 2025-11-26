@@ -18,7 +18,7 @@ public class OperatorClientController {
     // Список клиентов
     @GetMapping
     public String list(Model model) {
-        model.addAttribute("clients", clientService.findAll());
+        model.addAttribute("clients", clientService.findActive());
         return "operator/clients";
     }
 
@@ -60,10 +60,12 @@ public class OperatorClientController {
         return "redirect:/operator/clients";
     }
 
-    // Удаление
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Long id) {
-        clientService.deleteById(id);
+    // Вместо удаления - добавление в архив
+    @GetMapping("/deactivate/{id}")
+    public String deactivate(@PathVariable Long id) {
+        Client client = clientService.findById(id);
+        client.setActive(false);
+        clientService.save(client);
         return "redirect:/operator/clients";
     }
 }

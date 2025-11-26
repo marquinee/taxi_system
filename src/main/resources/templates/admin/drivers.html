@@ -28,8 +28,8 @@
         <td th:text="${d.experienceYears}"></td>
         <td>
             <a th:href="@{'/admin/drivers/edit/' + ${d.driverId}}">Редактировать</a> |
-            <a th:href="@{'/admin/drivers/delete/' + ${d.driverId}}"
-               onclick="return confirm('Удалить водителя?')">Удалить</a>
+            <a th:href="@{'/admin/drivers/deactivate/' + ${d.driverId}}"
+               onclick="return confirm('Добавить водителя в архив?')">В архив</a>
         </td>
     </tr>
 </table>

@@ -14,6 +14,9 @@ public class DriverService {
     }
 
     public List<Driver> findAll() {return repo.findAll();}
+    public List<Driver> findActive() {
+        return repo.findByActiveTrue();
+    }
     public Driver save(Driver d) {return repo.save(d);}
 
     public Driver findById(Long driverId) {
