@@ -17,7 +17,6 @@ public class UserService {
         this.encoder = encoder;
     }
     public User save(User user) {
-        user.setPasswordHash(encoder.encode(user.getPasswordHash()));
         return repo.save(user);
     }
     public List<User> findAll() {
