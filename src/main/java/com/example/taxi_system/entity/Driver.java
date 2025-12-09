@@ -17,7 +17,6 @@ public class Driver {
     private String phoneNumber;
     @Column(name = "experience_years")
     private int experienceYears;
-    private String status;
     private boolean active = true;
     @OneToOne
     @JoinColumn(name = "user_id")
@@ -63,13 +62,6 @@ public class Driver {
         this.experienceYears = experienceYears;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public boolean isActive() {
         return active;

@@ -46,5 +46,7 @@ public class OrderService {
         repo.save(order);
     }
 
-}
+    public Object findByDriverId(Long driverId) {
+        return repo.findByDriver_DriverId(driverId);
+    }}
 

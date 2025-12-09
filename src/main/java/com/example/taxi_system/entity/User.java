@@ -44,4 +44,12 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
+
+    public void setDriver(Driver driver) {
+        this.driver = driver;
+    }
+
+    public Driver getDriver() {
+        return driver;
+    }
 }
