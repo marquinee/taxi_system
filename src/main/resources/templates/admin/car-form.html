@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Добавление авто</title>
+</head>
+<body>
+<h2 th:text="${car.carId == null ? 'Добавить авто' : 'Редактировать авто'}"></h2>
+
+<form th:action="@{${actionUrl}}" th:object="${car}" method="post">
+
+  <label>Модель:</label>
+  <input type="text" th:field="*{model}" required><br><br>
+
+  <label>Госномер:</label>
+  <input type="text" th:field="*{licensePlate}" required><br><br>
+
+  <label>Год:</label>
+  <input type="number" th:field="*{year}" required><br><br>
+
+  <label>Водитель:</label>
+  <select name="driverId">
+    <option value="">-- Без водителя --</option>
+    <option th:each="d : ${drivers}"
+            th:value="${d.driverId}"
+            th:text="${d.fullName}"
+            th:selected="${car.driver != null && car.driver.driverId == d.driverId}"></option>
+  </select>
+
+  <br><br>
+  <button type="submit">Сохранить</button>
+</form>
+
+</body>
+</html>

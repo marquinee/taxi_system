@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование тарифа</title>
+</head>
+<body>
+<h2 th:text="${tariff.tariffId == null ? 'Создать тариф' : 'Редактировать тариф'}"></h2>
+
+<form th:action="@{${actionUrl}}" th:object="${tariff}" method="post">
+
+    <label>Название:</label>
+    <input type="text" th:field="*{name}" required><br><br>
+
+    <label>Базовая стоимость:</label>
+    <input type="number" step="0.01" th:field="*{baseRate}" required><br><br>
+
+    <label>Стоимость за км:</label>
+    <input type="number" step="0.01" th:field="*{perKmRate}" required><br><br>
+
+    <label>Активен:</label>
+    <input type="checkbox" th:field="*{active}"><br><br>
+
+    <button type="submit">Сохранить</button>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Автомобили</title>
+</head>
+<body>
+<h2>Автомобили</h2>
+<a th:href="@{/admin/cars/add}">Добавить авто</a>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Модель</th>
+        <th>Госномер</th>
+        <th>Год</th>
+        <th>Водитель</th>
+        <th>Действия</th>
+    </tr>
+
+    <tr th:each="c : ${cars}">
+        <td th:text="${c.carId}"></td>
+        <td th:text="${c.model}"></td>
+        <td th:text="${c.licensePlate}"></td>
+        <td th:text="${c.year}"></td>
+        <td th:text="${c.driver != null ? c.driver.fullName : '-'}"></td>
+        <td>
+            <a th:href="@{'/admin/cars/edit/' + ${c.carId}}">Редактировать</a> |
+            <a th:href="@{'/admin/cars/delete/' + ${c.carId}}"
+               onclick="return confirm('Удалить авто?')">Удалить</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Тарифы</title>
+</head>
+<body>
+<h2>Тарифы</h2>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Базовая ставка</th>
+        <th>Цена за км</th>
+        <th>Активен</th>
+    </tr>
+
+    <tr th:each="t : ${tariffs}">
+        <td th:text="${t.tariffId}"></td>
+        <td th:text="${t.name}"></td>
+        <td th:text="${t.baseRate}"></td>
+        <td th:text="${t.perKmRate}"></td>
+        <td th:text="${t.active}"></td>
+    </tr>
+</table>
+
+</body>
+</html>
