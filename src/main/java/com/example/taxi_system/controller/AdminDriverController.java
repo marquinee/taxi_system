@@ -1,7 +1,9 @@
 package com.example.taxi_system.controller;
 
 import com.example.taxi_system.entity.Driver;
+import com.example.taxi_system.entity.User;
 import com.example.taxi_system.service.DriverService;
+import com.example.taxi_system.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +13,11 @@ import org.springframework.web.bind.annotation.*;
 public class AdminDriverController {
 
     private final DriverService driverService;
+    private final UserService userService;
 
-    public AdminDriverController(DriverService driverService) {
+    public AdminDriverController(DriverService driverService, UserService userService) {
         this.driverService = driverService;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -25,36 +29,49 @@ public class AdminDriverController {
     @GetMapping("/add")
     public String addForm(Model model) {
         model.addAttribute("driver", new Driver());
+        // список пользователей с ролью DRIVER
+        model.addAttribute("users", userService.findAllDriversOnly());
         model.addAttribute("actionUrl", "/admin/drivers/add");
         return "admin/driver-form";
     }
 
 
     @PostMapping("/add")
-    public String add(@ModelAttribute("driver") Driver driver) {
+    public String add(@ModelAttribute("driver") Driver driver,
+                      @RequestParam Long userId) {
+
+        User user = userService.findById(userId);
+        driver.setUser(user);
+
         driverService.save(driver);
         return "redirect:/admin/drivers";
     }
 
 
+
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable Long id, Model model) {
         model.addAttribute("driver", driverService.findById(id));
+        // список пользователей
+        model.addAttribute("users", userService.findAllDriversOnly());
         model.addAttribute("actionUrl", "/admin/drivers/edit/" + id);
         return "admin/driver-form";
     }
 
     @PostMapping("/edit/{id}")
-    public String edit(@PathVariable Long id, @ModelAttribute("driver") Driver updated) {
+    public String edit(@PathVariable Long id, @ModelAttribute("driver") Driver updated, @RequestParam Long userId) {
 
-        Driver d = driverService.findById(id);
+        Driver driver = driverService.findById(id);
 
-        d.setFullName(updated.getFullName());
-        d.setLicenseNumber(updated.getLicenseNumber());
-        d.setPhoneNumber(updated.getPhoneNumber());
-        d.setExperienceYears(updated.getExperienceYears());
+        driver.setFullName(updated.getFullName());
+        driver.setLicenseNumber(updated.getLicenseNumber());
+        driver.setPhoneNumber(updated.getPhoneNumber());
+        driver.setExperienceYears(updated.getExperienceYears());
 
-        driverService.save(d);
+        User user = userService.findById(userId);
+        driver.setUser(user);
+
+        driverService.save(driver);
 
         return "redirect:/admin/drivers";
     }

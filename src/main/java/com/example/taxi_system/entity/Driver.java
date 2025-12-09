@@ -19,6 +19,9 @@ public class Driver {
     private int experienceYears;
     private String status;
     private boolean active = true;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public String getFullName() {
         return fullName;
@@ -74,5 +77,12 @@ public class Driver {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
     }
 }

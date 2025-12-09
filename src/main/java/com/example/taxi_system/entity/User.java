@@ -13,6 +13,8 @@ public class User {
     @Column(name = "password_hash")
     private String passwordHash;
     private String role;
+    @OneToOne(mappedBy = "user")
+    private Driver driver;
 
     public Long getUserId() {
         return userId;

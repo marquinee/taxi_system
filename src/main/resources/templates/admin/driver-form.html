@@ -21,6 +21,16 @@
   <label>Стаж:</label>
   <input type="number" th:field="*{experienceYears}"><br><br>
 
+  <label>Логин пользователя:</label>
+  <select name="userId" required>
+    <option th:each="u : ${users}"
+            th:value="${u.userId}"
+            th:text="${u.username}"
+            th:selected="${driver.user != null and driver.user.userId == u.userId}">
+    </option>
+  </select>
+  <br><br>
+
   <button type="submit">Сохранить</button>
 </form>
 
