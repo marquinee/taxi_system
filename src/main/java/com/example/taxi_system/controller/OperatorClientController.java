@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/operator/clients")
 public class OperatorClientController {
@@ -17,8 +19,20 @@ public class OperatorClientController {
 
     // Список клиентов
     @GetMapping
-    public String list(Model model) {
-        model.addAttribute("clients", clientService.findActive());
+    public String list(@RequestParam(required = false) String search,
+                       @RequestParam(required = false) String sortBy,
+                       @RequestParam(required = false, defaultValue = "asc") String sortDir,
+                       Model model) {
+        List<com.example.taxi_system.entity.Client> clients;
+        if (search != null && !search.trim().isEmpty()) {
+            clients = clientService.searchAndSort(search.trim(), sortBy, sortDir);
+        } else {
+            clients = clientService.sort(clientService.findActive(), sortBy, sortDir);
+        }
+        model.addAttribute("clients", clients);
+        model.addAttribute("search", search);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("sortDir", sortDir);
         return "operator/clients";
     }
 

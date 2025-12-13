@@ -10,6 +10,33 @@
 <a th:href="@{/operator/orders/add}">Создать заказ</a>
 <br><br>
 
+<!-- Форма поиска -->
+<form method="get" action="/operator/orders">
+    <input type="text" name="search" th:value="${search}" placeholder="Поиск по адресам...">
+    <button type="submit">Поиск</button>
+    <a th:href="@{/operator/orders}">Сбросить</a>
+</form>
+
+<br>
+
+<!-- Сортировка -->
+<form method="get" action="/operator/orders" style="display: inline;">
+    <input type="hidden" name="search" th:value="${search}">
+    <label>Сортировать по:</label>
+    <select name="sortBy" onchange="this.form.submit()">
+        <option value="">-- Без сортировки --</option>
+        <option value="createdAt" th:selected="${sortBy == 'createdAt'}">Дата создания</option>
+        <option value="price" th:selected="${sortBy == 'price'}">Цена</option>
+        <option value="status" th:selected="${sortBy == 'status'}">Статус</option>
+    </select>
+    <select name="sortDir" onchange="this.form.submit()">
+        <option value="asc" th:selected="${sortDir == 'asc'}">По возрастанию</option>
+        <option value="desc" th:selected="${sortDir == 'desc'}">По убыванию</option>
+    </select>
+</form>
+
+<br><br>
+
 <table border="1">
     <tr>
         <th>ID</th>

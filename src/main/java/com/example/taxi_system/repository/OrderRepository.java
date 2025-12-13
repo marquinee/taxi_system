@@ -13,5 +13,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByDriver_DriverId(Long driverId);
 
     List<Order> findByStatus(OrderStatus status);
+    
+    List<Order> findByPickupAddressContainingIgnoreCase(String pickupAddress);
+    List<Order> findByDestinationAddressContainingIgnoreCase(String destinationAddress);
 }
 

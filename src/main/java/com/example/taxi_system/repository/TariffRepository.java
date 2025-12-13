@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface TariffRepository extends JpaRepository<Tariff, Long> {
     List<Tariff> findByActiveTrue();
+    List<Tariff> findByNameContainingIgnoreCase(String name);
 }

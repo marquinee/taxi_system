@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/admin/drivers")
 public class AdminDriverController {
@@ -21,8 +23,20 @@ public class AdminDriverController {
     }
 
     @GetMapping
-    public String list(Model model) {
-        model.addAttribute("drivers", driverService.findActive());
+    public String list(@RequestParam(required = false) String search,
+                       @RequestParam(required = false) String sortBy,
+                       @RequestParam(required = false, defaultValue = "asc") String sortDir,
+                       Model model) {
+        List<com.example.taxi_system.entity.Driver> drivers;
+        if (search != null && !search.trim().isEmpty()) {
+            drivers = driverService.searchAndSort(search.trim(), sortBy, sortDir);
+        } else {
+            drivers = driverService.sort(driverService.findActive(), sortBy, sortDir);
+        }
+        model.addAttribute("drivers", drivers);
+        model.addAttribute("search", search);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("sortDir", sortDir);
         return "admin/drivers";
     }
 

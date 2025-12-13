@@ -9,6 +9,35 @@
 <h2>Автомобили</h2>
 <a th:href="@{/admin/cars/add}">Добавить авто</a>
 
+<br><br>
+
+<!-- Форма поиска -->
+<form method="get" action="/admin/cars">
+    <input type="text" name="search" th:value="${search}" placeholder="Поиск по модели или госномеру...">
+    <button type="submit">Поиск</button>
+    <a th:href="@{/admin/cars}">Сбросить</a>
+</form>
+
+<br>
+
+<!-- Сортировка -->
+<form method="get" action="/admin/cars" style="display: inline;">
+    <input type="hidden" name="search" th:value="${search}">
+    <label>Сортировать по:</label>
+    <select name="sortBy" onchange="this.form.submit()">
+        <option value="">-- Без сортировки --</option>
+        <option value="model" th:selected="${sortBy == 'model'}">Модель</option>
+        <option value="year" th:selected="${sortBy == 'year'}">Год</option>
+        <option value="licensePlate" th:selected="${sortBy == 'licensePlate'}">Госномер</option>
+    </select>
+    <select name="sortDir" onchange="this.form.submit()">
+        <option value="asc" th:selected="${sortDir == 'asc'}">По возрастанию</option>
+        <option value="desc" th:selected="${sortDir == 'desc'}">По убыванию</option>
+    </select>
+</form>
+
+<br><br>
+
 <table border="1">
     <tr>
         <th>ID</th>

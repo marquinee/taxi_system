@@ -7,6 +7,8 @@ import com.example.taxi_system.service.OrderService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 @Controller
 @RequestMapping("/operator/orders")
 public class OperatorOrderController {
@@ -24,8 +26,20 @@ public class OperatorOrderController {
     }
 
     @GetMapping
-    public String list(Model model) {
-        model.addAttribute("orders", orderService.findAll());
+    public String list(@RequestParam(required = false) String search,
+                       @RequestParam(required = false) String sortBy,
+                       @RequestParam(required = false, defaultValue = "asc") String sortDir,
+                       Model model) {
+        List<com.example.taxi_system.entity.Order> orders;
+        if (search != null && !search.trim().isEmpty()) {
+            orders = orderService.searchAndSort(search.trim(), sortBy, sortDir);
+        } else {
+            orders = orderService.sort(orderService.findAll(), sortBy, sortDir);
+        }
+        model.addAttribute("orders", orders);
+        model.addAttribute("search", search);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("sortDir", sortDir);
         return "operator/orders";
     }
 

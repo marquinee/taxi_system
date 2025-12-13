@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/admin/tariffs")
 public class AdminTariffController {
@@ -17,8 +19,20 @@ public class AdminTariffController {
     }
 
     @GetMapping
-    public String list(Model model) {
-        model.addAttribute("tariffs", tariffService.findAll());
+    public String list(@RequestParam(required = false) String search,
+                       @RequestParam(required = false) String sortBy,
+                       @RequestParam(required = false, defaultValue = "asc") String sortDir,
+                       Model model) {
+        List<com.example.taxi_system.entity.Tariff> tariffs;
+        if (search != null && !search.trim().isEmpty()) {
+            tariffs = tariffService.searchAndSort(search.trim(), sortBy, sortDir);
+        } else {
+            tariffs = tariffService.sort(tariffService.findAll(), sortBy, sortDir);
+        }
+        model.addAttribute("tariffs", tariffs);
+        model.addAttribute("search", search);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("sortDir", sortDir);
         return "admin/tariffs";
     }
 

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/admin/users")
 public class AdminUserController {
@@ -20,8 +22,20 @@ public class AdminUserController {
     }
 
     @GetMapping
-    public String list(Model model) {
-        model.addAttribute("users", userService.findAll());
+    public String list(@RequestParam(required = false) String search,
+                       @RequestParam(required = false) String sortBy,
+                       @RequestParam(required = false, defaultValue = "asc") String sortDir,
+                       Model model) {
+        List<com.example.taxi_system.entity.User> users;
+        if (search != null && !search.trim().isEmpty()) {
+            users = userService.searchAndSort(search.trim(), sortBy, sortDir);
+        } else {
+            users = userService.sort(userService.findAll(), sortBy, sortDir);
+        }
+        model.addAttribute("users", users);
+        model.addAttribute("search", search);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("sortDir", sortDir);
         return "admin/users";
     }
 
