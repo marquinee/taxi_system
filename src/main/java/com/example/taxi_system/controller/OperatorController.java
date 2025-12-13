@@ -19,17 +19,20 @@ public class OperatorController {
     private final OrderService orderService;
     private final CarService carService;
     private final TariffService tariffService;
+    private final StatisticsService statisticsService;
 
     public OperatorController(ClientService clientService,
                               DriverService driverService,
                               OrderService orderService,
                               CarService carService,
-                              TariffService tariffService) {
+                              TariffService tariffService,
+                              StatisticsService statisticsService) {
         this.clientService = clientService;
         this.driverService = driverService;
         this.orderService = orderService;
         this.carService = carService;
         this.tariffService = tariffService;
+        this.statisticsService = statisticsService;
     }
     @GetMapping("/cars")
     public String cars(Model model) {
@@ -44,7 +47,8 @@ public class OperatorController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard() {
+    public String dashboard(Model model) {
+        model.addAttribute("statistics", statisticsService.getOperatorStatistics());
         return "operator/dashboard";
     }
 

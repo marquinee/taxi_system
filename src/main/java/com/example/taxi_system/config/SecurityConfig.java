@@ -25,7 +25,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/css/**").permitAll() // Доступ без авторизации
+                        .requestMatchers("/login", "/css/**", "/about", "/error/**").permitAll() // Доступ без авторизации
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Только для ADMIN
                         .requestMatchers("/operator/**").hasRole("OPERATOR") // Только для OPERATOR
                         .requestMatchers("/driver/**").hasRole("DRIVER") // Только для DRIVER

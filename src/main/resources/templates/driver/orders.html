@@ -10,7 +10,7 @@
         <div th:replace="fragments/header :: header"></div>
         
         <div class="nav-links">
-            <a th:href="@{/driver/orders}" class="btn btn-secondary">На главную</a>
+            <a th:href="@{/driver/profile}" class="btn btn-secondary">Мой профиль</a>
         </div>
         
         <h2>Мои заказы</h2>
@@ -22,6 +22,7 @@
                 <th>Куда</th>
                 <th>Цена</th>
                 <th>Статус</th>
+                <th>Дата создания</th>
                 <th>Действия</th>
             </tr>
 
@@ -31,6 +32,7 @@
                 <td th:text="${o.destinationAddress}"></td>
                 <td th:text="${o.price}"></td>
                 <td th:text="${o.status}"></td>
+                <td th:text="${o.createdAt != null ? #temporals.format(o.createdAt, 'dd.MM.yyyy HH:mm') : '-'}"></td>
                 <td class="action-buttons">
                     <form th:if="${o.status.name() == 'ASSIGNED'}"
                           th:action="@{'/driver/orders/' + ${o.orderId} + '/start'}"

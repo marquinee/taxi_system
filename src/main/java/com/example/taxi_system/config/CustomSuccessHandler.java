@@ -27,7 +27,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
                 response.sendRedirect("/operator/dashboard");
                 break;
             case "ROLE_DRIVER":
-                response.sendRedirect("/driver/orders");
+                response.sendRedirect("/driver/profile");
                 break;
             default:
                 response.sendRedirect("/");

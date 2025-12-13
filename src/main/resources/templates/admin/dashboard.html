@@ -4,12 +4,47 @@
     <meta charset="UTF-8">
     <title>Панель администратора</title>
     <link th:href="@{/css/style.css}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
         <div th:replace="fragments/header :: header"></div>
         
         <h2>Панель администратора</h2>
+        
+        <!-- Статистика -->
+        <div class="statistics-section">
+            <h3>Статистика</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Всего пользователей</h4>
+                    <p class="stat-value" th:text="${statistics.totalUsers}">0</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Всего водителей</h4>
+                    <p class="stat-value" th:text="${statistics.totalDrivers}">0</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Активных водителей</h4>
+                    <p class="stat-value" th:text="${statistics.activeDrivers}">0</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Средний стаж (лет)</h4>
+                    <p class="stat-value" th:text="${statistics.avgExperience}">0</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Среднее время выполнения заказа (мин)</h4>
+                    <p class="stat-value" th:text="${statistics.avgCompletionTimeMinutes}">0</p>
+                </div>
+            </div>
+            
+            <div class="charts-container">
+                <div class="chart-wrapper">
+                    <h4>Пользователи по ролям</h4>
+                    <canvas id="usersByRoleChart"></canvas>
+                </div>
+            </div>
+        </div>
         
         <div class="dashboard">
             <a th:href="@{/admin/users}" class="dashboard-card">
@@ -33,5 +68,31 @@
             </a>
         </div>
     </div>
+    
+    <script th:inline="javascript">
+        const usersByRole = /*[[${statistics.usersByRole}]]*/ {};
+        const ctx = document.getElementById('usersByRoleChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(usersByRole),
+                datasets: [{
+                    label: 'Количество пользователей',
+                    data: Object.values(usersByRole),
+                    backgroundColor: '#FFD700',
+                    borderColor: '#FFA500',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>

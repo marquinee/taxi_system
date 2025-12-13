@@ -4,12 +4,51 @@
     <meta charset="UTF-8">
     <title>Панель оператора</title>
     <link th:href="@{/css/style.css}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
         <div th:replace="fragments/header :: header"></div>
         
         <h2>Панель оператора</h2>
+        
+        <!-- Статистика -->
+        <div class="statistics-section">
+            <h3>Статистика</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Всего клиентов</h4>
+                    <p class="stat-value" th:text="${statistics.totalClients}">0</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Активных клиентов</h4>
+                    <p class="stat-value" th:text="${statistics.activeClients}">0</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Всего заказов</h4>
+                    <p class="stat-value" th:text="${statistics.totalOrders}">0</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Среднее время выполнения заказа (мин)</h4>
+                    <p class="stat-value" th:text="${statistics.avgCompletionTimeMinutes}">0</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Средняя стоимость заказа</h4>
+                    <p class="stat-value" th:text="${#numbers.formatDecimal(statistics.avgPrice, 1, 2)}">0</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Общая выручка</h4>
+                    <p class="stat-value" th:text="${#numbers.formatDecimal(statistics.totalRevenue, 1, 2)}">0</p>
+                </div>
+            </div>
+            
+            <div class="charts-container">
+                <div class="chart-wrapper">
+                    <h4>Заказы по статусам</h4>
+                    <canvas id="ordersByStatusChart"></canvas>
+                </div>
+            </div>
+        </div>
         
         <div class="dashboard">
             <a th:href="@{/operator/clients}" class="dashboard-card">
@@ -33,5 +72,24 @@
             </a>
         </div>
     </div>
+    
+    <script th:inline="javascript">
+        const ordersByStatus = /*[[${statistics.ordersByStatus}]]*/ {};
+        const ctx = document.getElementById('ordersByStatusChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(ordersByStatus),
+                datasets: [{
+                    data: Object.values(ordersByStatus),
+                    backgroundColor: ['#FFD700', '#FFA500', '#32CD32', '#FF6347', '#42AAFF'],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    </script>
 </body>
 </html>

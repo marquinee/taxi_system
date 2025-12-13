@@ -1,30 +1,24 @@
 package com.example.taxi_system.controller;
 
-import com.example.taxi_system.entity.Driver;
-import com.example.taxi_system.entity.User;
-import com.example.taxi_system.service.DriverService;
-import com.example.taxi_system.service.UserService;
+import com.example.taxi_system.service.StatisticsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final UserService userService;
-    private final DriverService driverService;
+    private final StatisticsService statisticsService;
 
-    public AdminController(UserService userService, DriverService driverService) {
-        this.userService = userService;
-        this.driverService = driverService;
+    public AdminController(StatisticsService statisticsService) {
+        this.statisticsService = statisticsService;
     }
 
     @GetMapping("/dashboard")
-    public String dashboard() {
+    public String dashboard(Model model) {
+        model.addAttribute("statistics", statisticsService.getAdminStatistics());
         return "admin/dashboard";
     }
 }
