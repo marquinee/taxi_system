@@ -1,40 +1,56 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Водитель</title></head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Водитель</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
 <body>
+    <div class="container">
+        <div th:replace="fragments/header :: header"></div>
+        
+        <div class="nav-links">
+            <a th:href="@{/admin/dashboard}" class="btn btn-secondary">На главную</a>
+            <a th:href="@{/admin/drivers}" class="btn btn-secondary">К списку водителей</a>
+        </div>
+        
+        <h2 th:text="${driver.driverId == null ? 'Добавить водителя' : 'Редактировать водителя'}"></h2>
 
-<div th:replace="fragments/header :: header"></div>
+        <form th:action="@{${actionUrl}}" th:object="${driver}" method="post">
+            <div class="form-group">
+                <label>ФИО:</label>
+                <input type="text" th:field="*{fullName}" required>
+            </div>
 
-<h2 th:text="${driver.driverId == null ? 'Добавить водителя' : 'Редактировать водителя'}"></h2>
+            <div class="form-group">
+                <label>Номер лицензии:</label>
+                <input type="text" th:field="*{licenseNumber}" required>
+            </div>
 
-<form th:action="@{${actionUrl}}" th:object="${driver}" method="post">
+            <div class="form-group">
+                <label>Телефон:</label>
+                <input type="text" th:field="*{phoneNumber}">
+            </div>
 
-<label>ФИО:</label>
-  <input type="text" th:field="*{fullName}" required><br><br>
+            <div class="form-group">
+                <label>Стаж:</label>
+                <input type="number" th:field="*{experienceYears}">
+            </div>
 
-  <label>Номер лицензии:</label>
-  <input type="text" th:field="*{licenseNumber}" required><br><br>
+            <div class="form-group">
+                <label>Логин пользователя:</label>
+                <select name="userId" required>
+                    <option th:each="u : ${users}"
+                            th:value="${u.userId}"
+                            th:text="${u.username}"
+                            th:selected="${driver.user != null and driver.user.userId == u.userId}">
+                    </option>
+                </select>
+            </div>
 
-  <label>Телефон:</label>
-  <input type="text" th:field="*{phoneNumber}"><br><br>
-
-  <label>Стаж:</label>
-  <input type="number" th:field="*{experienceYears}"><br><br>
-
-  <label>Логин пользователя:</label>
-  <select name="userId" required>
-    <option th:each="u : ${users}"
-            th:value="${u.userId}"
-            th:text="${u.username}"
-            th:selected="${driver.user != null and driver.user.userId == u.userId}">
-    </option>
-  </select>
-  <br><br>
-
-  <button type="submit">Сохранить</button>
-</form>
-
-<a th:href="@{/admin/drivers}">Отмена</a>
-
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a th:href="@{/admin/drivers}" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
 </body>
 </html>

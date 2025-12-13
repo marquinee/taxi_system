@@ -1,67 +1,63 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Водители</title></head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Водители</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
 <body>
+    <div class="container">
+        <div th:replace="fragments/header :: header"></div>
+        
+        <div class="nav-links">
+            <a th:href="@{/admin/dashboard}" class="btn btn-secondary">На главную</a>
+            <a th:href="@{/admin/drivers/add}" class="btn btn-primary">Добавить водителя</a>
+        </div>
+        
+        <h2>Водители</h2>
 
-<div th:replace="fragments/header :: header"></div>
+        <!-- Форма поиска -->
+        <form method="get" action="/admin/drivers" class="search-form">
+            <input type="text" name="search" th:value="${search}" placeholder="Поиск по ФИО, телефону или лицензии...">
+            <button type="submit" class="btn btn-primary">Поиск</button>
+            <a th:href="@{/admin/drivers}" class="btn btn-secondary">Сбросить</a>
+            
+            <label>Сортировать по:</label>
+            <select name="sortBy" onchange="this.form.submit()">
+                <option value="">-- Без сортировки --</option>
+                <option value="fullName" th:selected="${sortBy == 'fullName'}">ФИО</option>
+                <option value="experienceYears" th:selected="${sortBy == 'experienceYears'}">Стаж</option>
+                <option value="phoneNumber" th:selected="${sortBy == 'phoneNumber'}">Телефон</option>
+            </select>
+            <select name="sortDir" onchange="this.form.submit()">
+                <option value="asc" th:selected="${sortDir == 'asc'}">По возрастанию</option>
+                <option value="desc" th:selected="${sortDir == 'desc'}">По убыванию</option>
+            </select>
+        </form>
 
-<h2>Водители</h2>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>ФИО</th>
+                <th>Лицензия</th>
+                <th>Телефон</th>
+                <th>Стаж (лет)</th>
+                <th>Действия</th>
+            </tr>
 
-<a th:href="@{/admin/drivers/add}">Добавить водителя</a>
-<br><br>
-
-<!-- Форма поиска -->
-<form method="get" action="/admin/drivers">
-    <input type="text" name="search" th:value="${search}" placeholder="Поиск по ФИО, телефону или лицензии...">
-    <button type="submit">Поиск</button>
-    <a th:href="@{/admin/drivers}">Сбросить</a>
-</form>
-
-<br>
-
-<!-- Сортировка -->
-<form method="get" action="/admin/drivers" style="display: inline;">
-    <input type="hidden" name="search" th:value="${search}">
-    <label>Сортировать по:</label>
-    <select name="sortBy" onchange="this.form.submit()">
-        <option value="">-- Без сортировки --</option>
-        <option value="fullName" th:selected="${sortBy == 'fullName'}">ФИО</option>
-        <option value="experienceYears" th:selected="${sortBy == 'experienceYears'}">Стаж</option>
-        <option value="phoneNumber" th:selected="${sortBy == 'phoneNumber'}">Телефон</option>
-    </select>
-    <select name="sortDir" onchange="this.form.submit()">
-        <option value="asc" th:selected="${sortDir == 'asc'}">По возрастанию</option>
-        <option value="desc" th:selected="${sortDir == 'desc'}">По убыванию</option>
-    </select>
-</form>
-
-<br><br>
-
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>ФИО</th>
-        <th>Лицензия</th>
-        <th>Телефон</th>
-        <th>Стаж (лет)</th>
-        <th>Действия</th>
-    </tr>
-
-    <tr th:each="d : ${drivers}">
-        <td th:text="${d.driverId}"></td>
-        <td th:text="${d.fullName}"></td>
-        <td th:text="${d.licenseNumber}"></td>
-        <td th:text="${d.phoneNumber}"></td>
-        <td th:text="${d.experienceYears}"></td>
-        <td>
-            <a th:href="@{'/admin/drivers/edit/' + ${d.driverId}}">Редактировать</a> |
-            <a th:href="@{'/admin/drivers/deactivate/' + ${d.driverId}}"
-               onclick="return confirm('Добавить водителя в архив?')">В архив</a>
-        </td>
-    </tr>
-</table>
-
-<a th:href="@{/admin/dashboard}">Назад</a>
-
+            <tr th:each="d : ${drivers}">
+                <td th:text="${d.driverId}"></td>
+                <td th:text="${d.fullName}"></td>
+                <td th:text="${d.licenseNumber}"></td>
+                <td th:text="${d.phoneNumber}"></td>
+                <td th:text="${d.experienceYears}"></td>
+                <td class="action-buttons">
+                    <a th:href="@{'/admin/drivers/edit/' + ${d.driverId}}">Редактировать</a>
+                    <a th:href="@{'/admin/drivers/deactivate/' + ${d.driverId}}"
+                       onclick="return confirm('Добавить водителя в архив?')">В архив</a>
+                </td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>

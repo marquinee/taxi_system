@@ -1,36 +1,51 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Добавление авто</title>
+    <meta charset="UTF-8">
+    <title>Добавление авто</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 <body>
-<h2 th:text="${car.carId == null ? 'Добавить авто' : 'Редактировать авто'}"></h2>
+    <div class="container">
+        <div th:replace="fragments/header :: header"></div>
+        
+        <div class="nav-links">
+            <a th:href="@{/admin/dashboard}" class="btn btn-secondary">На главную</a>
+            <a th:href="@{/admin/cars}" class="btn btn-secondary">К списку авто</a>
+        </div>
+        
+        <h2 th:text="${car.carId == null ? 'Добавить авто' : 'Редактировать авто'}"></h2>
 
-<form th:action="@{${actionUrl}}" th:object="${car}" method="post">
+        <form th:action="@{${actionUrl}}" th:object="${car}" method="post">
+            <div class="form-group">
+                <label>Модель:</label>
+                <input type="text" th:field="*{model}" required>
+            </div>
 
-  <label>Модель:</label>
-  <input type="text" th:field="*{model}" required><br><br>
+            <div class="form-group">
+                <label>Госномер:</label>
+                <input type="text" th:field="*{licensePlate}" required>
+            </div>
 
-  <label>Госномер:</label>
-  <input type="text" th:field="*{licensePlate}" required><br><br>
+            <div class="form-group">
+                <label>Год:</label>
+                <input type="number" th:field="*{year}" required>
+            </div>
 
-  <label>Год:</label>
-  <input type="number" th:field="*{year}" required><br><br>
+            <div class="form-group">
+                <label>Водитель:</label>
+                <select name="driverId">
+                    <option value="">-- Без водителя --</option>
+                    <option th:each="d : ${drivers}"
+                            th:value="${d.driverId}"
+                            th:text="${d.fullName}"
+                            th:selected="${car.driver != null && car.driver.driverId == d.driverId}"></option>
+                </select>
+            </div>
 
-  <label>Водитель:</label>
-  <select name="driverId">
-    <option value="">-- Без водителя --</option>
-    <option th:each="d : ${drivers}"
-            th:value="${d.driverId}"
-            th:text="${d.fullName}"
-            th:selected="${car.driver != null && car.driver.driverId == d.driverId}"></option>
-  </select>
-
-  <br><br>
-  <button type="submit">Сохранить</button>
-</form>
-
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a th:href="@{/admin/cars}" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
 </body>
 </html>

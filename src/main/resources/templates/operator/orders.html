@@ -1,113 +1,102 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Заказы</title></head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Заказы</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
 <body>
+    <div class="container">
+        <div th:replace="fragments/header :: header"></div>
+        
+        <div class="nav-links">
+            <a th:href="@{/operator/dashboard}" class="btn btn-secondary">На главную</a>
+            <a th:href="@{/operator/orders/add}" class="btn btn-primary">Создать заказ</a>
+        </div>
+        
+        <h2>Заказы</h2>
 
-<div th:replace="fragments/header :: header"></div>
+        <!-- Форма поиска -->
+        <form method="get" action="/operator/orders" class="search-form">
+            <input type="text" name="search" th:value="${search}" placeholder="Поиск по адресам...">
+            <button type="submit" class="btn btn-primary">Поиск</button>
+            <a th:href="@{/operator/orders}" class="btn btn-secondary">Сбросить</a>
+            
+            <label>Сортировать по:</label>
+            <select name="sortBy" onchange="this.form.submit()">
+                <option value="">-- Без сортировки --</option>
+                <option value="createdAt" th:selected="${sortBy == 'createdAt'}">Дата создания</option>
+                <option value="price" th:selected="${sortBy == 'price'}">Цена</option>
+                <option value="status" th:selected="${sortBy == 'status'}">Статус</option>
+            </select>
+            <select name="sortDir" onchange="this.form.submit()">
+                <option value="asc" th:selected="${sortDir == 'asc'}">По возрастанию</option>
+                <option value="desc" th:selected="${sortDir == 'desc'}">По убыванию</option>
+            </select>
+        </form>
 
-<h2>Заказы</h2>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Клиент</th>
+                <th>Водитель</th>
+                <th>Откуда</th>
+                <th>Куда</th>
+                <th>Цена</th>
+                <th>Статус</th>
+                <th>Дата</th>
+                <th>Действия</th>
+            </tr>
 
-<a th:href="@{/operator/orders/add}">Создать заказ</a>
-<br><br>
+            <tr th:each="o : ${orders}">
+                <td th:text="${o.orderId}"></td>
+                <td th:text="${o.client.fullName}"></td>
+                <td th:text="${o.driver != null ? o.driver.fullName : '-'}"></td>
+                <td th:text="${o.pickupAddress}"></td>
+                <td th:text="${o.destinationAddress}"></td>
+                <td th:text="${o.price}"></td>
+                <td th:text="${o.status}"></td>
+                <td th:text="${o.createdAt}"></td>
+                <td class="action-buttons">
+                    <!-- Назначить водителя -->
+                    <a th:if="${o.status.name() == 'NEW'}"
+                       th:href="@{'/operator/orders/edit/' + ${o.orderId}}"
+                       class="btn btn-primary">Назначить</a>
 
-<!-- Форма поиска -->
-<form method="get" action="/operator/orders">
-    <input type="text" name="search" th:value="${search}" placeholder="Поиск по адресам...">
-    <button type="submit">Поиск</button>
-    <a th:href="@{/operator/orders}">Сбросить</a>
-</form>
+                    <!-- Начать поездку -->
+                    <form th:if="${o.status.name() == 'ASSIGNED'}"
+                          th:action="@{'/operator/orders/' + ${o.orderId} + '/setStatus'}"
+                          method="post" style="display: inline;">
+                        <input type="hidden" name="status" value="IN_PROGRESS">
+                        <button type="submit" class="btn btn-primary">Начать</button>
+                    </form>
 
-<br>
+                    <!-- Завершить -->
+                    <form th:if="${o.status.name() == 'IN_PROGRESS'}"
+                          th:action="@{'/operator/orders/' + ${o.orderId} + '/setStatus'}"
+                          method="post" style="display: inline;">
+                        <input type="hidden" name="status" value="COMPLETED">
+                        <button type="submit" class="btn btn-primary">Завершить</button>
+                    </form>
 
-<!-- Сортировка -->
-<form method="get" action="/operator/orders" style="display: inline;">
-    <input type="hidden" name="search" th:value="${search}">
-    <label>Сортировать по:</label>
-    <select name="sortBy" onchange="this.form.submit()">
-        <option value="">-- Без сортировки --</option>
-        <option value="createdAt" th:selected="${sortBy == 'createdAt'}">Дата создания</option>
-        <option value="price" th:selected="${sortBy == 'price'}">Цена</option>
-        <option value="status" th:selected="${sortBy == 'status'}">Статус</option>
-    </select>
-    <select name="sortDir" onchange="this.form.submit()">
-        <option value="asc" th:selected="${sortDir == 'asc'}">По возрастанию</option>
-        <option value="desc" th:selected="${sortDir == 'desc'}">По убыванию</option>
-    </select>
-</form>
+                    <!-- Отменить -->
+                    <form th:if="${o.status.name() != 'COMPLETED'}"
+                          th:action="@{'/operator/orders/' + ${o.orderId} + '/setStatus'}"
+                          method="post" style="display: inline;">
+                        <input type="hidden" name="status" value="CANCELLED">
+                        <button type="submit" class="btn btn-danger"
+                                onclick="return confirm('Отменить заказ?')">
+                            Отменить
+                        </button>
+                    </form>
 
-<br><br>
-
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Клиент</th>
-        <th>Водитель</th>
-        <th>Откуда</th>
-        <th>Куда</th>
-        <th>Цена</th>
-        <th>Статус</th>
-        <th>Дата</th>
-        <th>Действия</th>
-    </tr>
-
-    <tr th:each="o : ${orders}">
-        <td th:text="${o.orderId}"></td>
-        <td th:text="${o.client.fullName}"></td>
-        <td th:text="${o.driver != null ? o.driver.fullName : '-'}"></td>
-        <td th:text="${o.pickupAddress}"></td>
-        <td th:text="${o.destinationAddress}"></td>
-        <td th:text="${o.price}"></td>
-        <td th:text="${o.status}"></td>
-        <td th:text="${o.createdAt}"></td>
-        <td>
-
-            <!-- Назначить водителя -->
-            <a th:if="${o.status.name() == 'NEW'}"
-               th:href="@{'/operator/orders/edit/' + ${o.orderId}}">
-                <button type="submit">Назначить</button>
-            </a><br>
-
-            <!-- Начать поездку -->
-            <form th:if="${o.status.name() == 'ASSIGNED'}"
-                  th:action="@{'/operator/orders/' + ${o.orderId} + '/setStatus'}"
-                  method="post">
-                <input type="hidden" name="status" value="IN_PROGRESS">
-                <button type="submit">Начать</button>
-            </form>
-
-            <!-- Завершить -->
-            <form th:if="${o.status.name() == 'IN_PROGRESS'}"
-                  th:action="@{'/operator/orders/' + ${o.orderId} + '/setStatus'}"
-                  method="post">
-                <input type="hidden" name="status" value="COMPLETED">
-                <button type="submit">Завершить</button>
-            </form>
-
-            <!-- Отменить -->
-            <form th:if="${o.status.name() != 'COMPLETED'}"
-                  th:action="@{'/operator/orders/' + ${o.orderId} + '/setStatus'}"
-                  method="post">
-                <input type="hidden" name="status" value="CANCELLED">
-                <button type="submit"
-                        onclick="return confirm('Отменить заказ?')">
-                    Отменить
-                </button>
-            </form>
-
-            <!-- Стандартные действия -->
-            <br>
-            <a th:href="@{'/operator/orders/edit/' + ${o.orderId}}">Редактировать</a> |
-            <a th:href="@{'/operator/orders/delete/' + ${o.orderId}}"
-               onclick="return confirm('Удалить заказ?')">
-                Удалить
-            </a>
-
-        </td>
-
-    </tr>
-</table>
-
-<a th:href="@{/operator/dashboard}">Назад</a>
-
+                    <!-- Стандартные действия -->
+                    <a th:href="@{'/operator/orders/edit/' + ${o.orderId}}">Редактировать</a>
+                    <a th:href="@{'/operator/orders/delete/' + ${o.orderId}}"
+                       onclick="return confirm('Удалить заказ?')">Удалить</a>
+                </td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>

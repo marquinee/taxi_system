@@ -1,31 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Автомобили</title>
+    <meta charset="UTF-8">
+    <title>Автомобили</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 <body>
-<h2>Автомобили</h2>
+    <div class="container">
+        <div th:replace="fragments/header :: header"></div>
+        
+        <div class="nav-links">
+            <a th:href="@{/operator/dashboard}" class="btn btn-secondary">На главную</a>
+        </div>
+        
+        <h2>Автомобили</h2>
 
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Модель</th>
+                <th>Госномер</th>
+                <th>Год</th>
+                <th>Водитель</th>
+            </tr>
 
-<table border="1">
-  <tr>
-    <th>ID</th>
-    <th>Модель</th>
-    <th>Госномер</th>
-    <th>Год</th>
-    <th>Водитель</th>
-  </tr>
-
-  <tr th:each="c : ${cars}">
-    <td th:text="${c.carId}"></td>
-    <td th:text="${c.model}"></td>
-    <td th:text="${c.licensePlate}"></td>
-    <td th:text="${c.year}"></td>
-    <td th:text="${c.driver != null ? c.driver.fullName : '-'}"></td>
-  </tr>
-</table>
-
+            <tr th:each="c : ${cars}">
+                <td th:text="${c.carId}"></td>
+                <td th:text="${c.model}"></td>
+                <td th:text="${c.licensePlate}"></td>
+                <td th:text="${c.year}"></td>
+                <td th:text="${c.driver != null ? c.driver.fullName : '-'}"></td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>

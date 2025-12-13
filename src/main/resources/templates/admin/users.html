@@ -1,63 +1,58 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Пользователи</title></head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Пользователи</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
 <body>
+    <div class="container">
+        <div th:replace="fragments/header :: header"></div>
+        
+        <div class="nav-links">
+            <a th:href="@{/admin/dashboard}" class="btn btn-secondary">На главную</a>
+            <a th:href="@{/admin/users/add}" class="btn btn-primary">Добавить пользователя</a>
+        </div>
+        
+        <h2>Пользователи</h2>
 
-<div th:replace="fragments/header :: header"></div>
+        <!-- Форма поиска -->
+        <form method="get" action="/admin/users" class="search-form">
+            <input type="text" name="search" th:value="${search}" placeholder="Поиск по логину или роли...">
+            <button type="submit" class="btn btn-primary">Поиск</button>
+            <a th:href="@{/admin/users}" class="btn btn-secondary">Сбросить</a>
+            
+            <label>Сортировать по:</label>
+            <select name="sortBy" onchange="this.form.submit()">
+                <option value="">-- Без сортировки --</option>
+                <option value="username" th:selected="${sortBy == 'username'}">Логин</option>
+                <option value="role" th:selected="${sortBy == 'role'}">Роль</option>
+            </select>
+            <select name="sortDir" onchange="this.form.submit()">
+                <option value="asc" th:selected="${sortDir == 'asc'}">По возрастанию</option>
+                <option value="desc" th:selected="${sortDir == 'desc'}">По убыванию</option>
+            </select>
+        </form>
 
-<h2>Пользователи</h2>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Логин</th>
+                <th>Роль</th>
+                <th>Действия</th>
+            </tr>
 
-<a th:href="@{/admin/users/add}">Добавить пользователя</a>
-<br><br>
-
-<!-- Форма поиска -->
-<form method="get" action="/admin/users">
-    <input type="text" name="search" th:value="${search}" placeholder="Поиск по логину или роли...">
-    <button type="submit">Поиск</button>
-    <a th:href="@{/admin/users}">Сбросить</a>
-</form>
-
-<br>
-
-<!-- Сортировка -->
-<form method="get" action="/admin/users" style="display: inline;">
-    <input type="hidden" name="search" th:value="${search}">
-    <label>Сортировать по:</label>
-    <select name="sortBy" onchange="this.form.submit()">
-        <option value="">-- Без сортировки --</option>
-        <option value="username" th:selected="${sortBy == 'username'}">Логин</option>
-        <option value="role" th:selected="${sortBy == 'role'}">Роль</option>
-    </select>
-    <select name="sortDir" onchange="this.form.submit()">
-        <option value="asc" th:selected="${sortDir == 'asc'}">По возрастанию</option>
-        <option value="desc" th:selected="${sortDir == 'desc'}">По убыванию</option>
-    </select>
-</form>
-
-<br><br>
-
-<table border="1">
-  <tr>
-    <th>ID</th>
-    <th>Логин</th>
-    <th>Роль</th>
-    <th>Действия</th>
-  </tr>
-
-  <tr th:each="u : ${users}">
-    <td th:text="${u.userId}"></td>
-    <td th:text="${u.username}"></td>
-    <td th:text="${u.role}"></td>
-    <td>
-      <a th:href="@{'/admin/users/edit/' + ${u.userId}}">Редактировать</a>
-      |
-      <a th:href="@{'/admin/users/delete/' + ${u.userId}}"
-         onclick="return confirm('Точно удалить?')">Удалить</a>
-    </td>
-  </tr>
-</table>
-
-<a th:href="@{/admin/dashboard}">Назад</a>
-
+            <tr th:each="u : ${users}">
+                <td th:text="${u.userId}"></td>
+                <td th:text="${u.username}"></td>
+                <td th:text="${u.role}"></td>
+                <td class="action-buttons">
+                    <a th:href="@{'/admin/users/edit/' + ${u.userId}}">Редактировать</a>
+                    <a th:href="@{'/admin/users/delete/' + ${u.userId}}"
+                       onclick="return confirm('Точно удалить?')">Удалить</a>
+                </td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>

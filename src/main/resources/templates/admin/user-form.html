@@ -1,34 +1,45 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Пользователь</title></head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Пользователь</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
 <body>
+    <div class="container">
+        <div th:replace="fragments/header :: header"></div>
+        
+        <div class="nav-links">
+            <a th:href="@{/admin/dashboard}" class="btn btn-secondary">На главную</a>
+            <a th:href="@{/admin/users}" class="btn btn-secondary">К списку пользователей</a>
+        </div>
+        
+        <h2 th:text="${user.userId == null ? 'Добавить пользователя' : 'Редактировать пользователя'}"></h2>
 
-<div th:replace="fragments/header :: header"></div>
+        <form th:action="@{${actionUrl}}" th:object="${user}" method="post">
+            <div class="form-group">
+                <label>Логин:</label>
+                <input type="text" th:field="*{username}" required>
+            </div>
 
-<h2 th:text="${user.userId == null ? 'Добавить пользователя' : 'Редактировать пользователя'}"></h2>
+            <div class="form-group">
+                <label>Роль:</label>
+                <select th:field="*{role}">
+                    <option value="ADMIN">ADMIN</option>
+                    <option value="OPERATOR">OPERATOR</option>
+                    <option value="DRIVER">DRIVER</option>
+                </select>
+            </div>
 
-<form th:action="@{${actionUrl}}" th:object="${user}" method="post">
+            <div class="form-group">
+                <label>Пароль:</label>
+                <input type="password" th:field="*{passwordHash}">
+                <small th:if="${user.userId != null}" style="display: block; margin-top: 5px; color: #666;">Оставьте пустым, чтобы не менять</small>
+            </div>
 
-
-    <label>Логин:</label>
-    <input type="text" th:field="*{username}" required><br><br>
-
-    <label>Роль:</label>
-    <select th:field="*{role}">
-        <option value="ADMIN">ADMIN</option>
-        <option value="OPERATOR">OPERATOR</option>
-        <option value="DRIVER">DRIVER</option>
-    </select><br><br>
-
-    <label>Пароль:</label>
-    <input type="password" th:field="*{passwordHash}">
-    <small th:if="${user.userId != null}">Оставьте пустым, чтобы не менять</small>
-    <br><br>
-
-    <button type="submit">Сохранить</button>
-</form>
-
-<a th:href="@{/admin/users}">Отмена</a>
-
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a th:href="@{/admin/users}" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
 </body>
 </html>

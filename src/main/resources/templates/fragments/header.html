@@ -1,14 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <div th:fragment="header">
-        <form th:action="@{/logout}" method="post">
-            <button type="submit">Выйти</button>
-        </form>
-    </div>
 </head>
 <body>
-
+    <div th:fragment="header">
+        <div class="header">
+            <h1>🚕 Система управления такси</h1>
+            <div class="header-nav">
+                <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-logout">Выйти</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

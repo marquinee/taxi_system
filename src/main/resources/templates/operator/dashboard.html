@@ -1,10 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <h2>Оператор — дашборд</h2>
+    <title>Панель оператора</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 <body>
-
+    <div class="container">
+        <div th:replace="fragments/header :: header"></div>
+        
+        <h2>Панель оператора</h2>
+        
+        <div class="dashboard">
+            <a th:href="@{/operator/clients}" class="dashboard-card">
+                <h3>👤 Клиенты</h3>
+                <p>Управление клиентами</p>
+            </a>
+            
+            <a th:href="@{/operator/orders}" class="dashboard-card">
+                <h3>📋 Заказы</h3>
+                <p>Управление заказами</p>
+            </a>
+            
+            <a th:href="@{/operator/tariffs}" class="dashboard-card">
+                <h3>💰 Тарифы</h3>
+                <p>Просмотр тарифов</p>
+            </a>
+            
+            <a th:href="@{/operator/cars}" class="dashboard-card">
+                <h3>🚙 Автомобили</h3>
+                <p>Просмотр автомобилей</p>
+            </a>
+        </div>
+    </div>
 </body>
 </html>

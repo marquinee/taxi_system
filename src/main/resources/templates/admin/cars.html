@@ -1,66 +1,63 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Автомобили</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 <body>
-<h2>Автомобили</h2>
-<a th:href="@{/admin/cars/add}">Добавить авто</a>
+    <div class="container">
+        <div th:replace="fragments/header :: header"></div>
+        
+        <div class="nav-links">
+            <a th:href="@{/admin/dashboard}" class="btn btn-secondary">На главную</a>
+            <a th:href="@{/admin/cars/add}" class="btn btn-primary">Добавить авто</a>
+        </div>
+        
+        <h2>Автомобили</h2>
 
-<br><br>
+        <!-- Форма поиска -->
+        <form method="get" action="/admin/cars" class="search-form">
+            <input type="text" name="search" th:value="${search}" placeholder="Поиск по модели или госномеру...">
+            <button type="submit" class="btn btn-primary">Поиск</button>
+            <a th:href="@{/admin/cars}" class="btn btn-secondary">Сбросить</a>
+            
+            <label>Сортировать по:</label>
+            <select name="sortBy" onchange="this.form.submit()">
+                <option value="">-- Без сортировки --</option>
+                <option value="model" th:selected="${sortBy == 'model'}">Модель</option>
+                <option value="year" th:selected="${sortBy == 'year'}">Год</option>
+                <option value="licensePlate" th:selected="${sortBy == 'licensePlate'}">Госномер</option>
+            </select>
+            <select name="sortDir" onchange="this.form.submit()">
+                <option value="asc" th:selected="${sortDir == 'asc'}">По возрастанию</option>
+                <option value="desc" th:selected="${sortDir == 'desc'}">По убыванию</option>
+            </select>
+        </form>
 
-<!-- Форма поиска -->
-<form method="get" action="/admin/cars">
-    <input type="text" name="search" th:value="${search}" placeholder="Поиск по модели или госномеру...">
-    <button type="submit">Поиск</button>
-    <a th:href="@{/admin/cars}">Сбросить</a>
-</form>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Модель</th>
+                <th>Госномер</th>
+                <th>Год</th>
+                <th>Водитель</th>
+                <th>Действия</th>
+            </tr>
 
-<br>
-
-<!-- Сортировка -->
-<form method="get" action="/admin/cars" style="display: inline;">
-    <input type="hidden" name="search" th:value="${search}">
-    <label>Сортировать по:</label>
-    <select name="sortBy" onchange="this.form.submit()">
-        <option value="">-- Без сортировки --</option>
-        <option value="model" th:selected="${sortBy == 'model'}">Модель</option>
-        <option value="year" th:selected="${sortBy == 'year'}">Год</option>
-        <option value="licensePlate" th:selected="${sortBy == 'licensePlate'}">Госномер</option>
-    </select>
-    <select name="sortDir" onchange="this.form.submit()">
-        <option value="asc" th:selected="${sortDir == 'asc'}">По возрастанию</option>
-        <option value="desc" th:selected="${sortDir == 'desc'}">По убыванию</option>
-    </select>
-</form>
-
-<br><br>
-
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Модель</th>
-        <th>Госномер</th>
-        <th>Год</th>
-        <th>Водитель</th>
-        <th>Действия</th>
-    </tr>
-
-    <tr th:each="c : ${cars}">
-        <td th:text="${c.carId}"></td>
-        <td th:text="${c.model}"></td>
-        <td th:text="${c.licensePlate}"></td>
-        <td th:text="${c.year}"></td>
-        <td th:text="${c.driver != null ? c.driver.fullName : '-'}"></td>
-        <td>
-            <a th:href="@{'/admin/cars/edit/' + ${c.carId}}">Редактировать</a> |
-            <a th:href="@{'/admin/cars/delete/' + ${c.carId}}"
-               onclick="return confirm('Удалить авто?')">Удалить</a>
-        </td>
-    </tr>
-</table>
-
+            <tr th:each="c : ${cars}">
+                <td th:text="${c.carId}"></td>
+                <td th:text="${c.model}"></td>
+                <td th:text="${c.licensePlate}"></td>
+                <td th:text="${c.year}"></td>
+                <td th:text="${c.driver != null ? c.driver.fullName : '-'}"></td>
+                <td class="action-buttons">
+                    <a th:href="@{'/admin/cars/edit/' + ${c.carId}}">Редактировать</a>
+                    <a th:href="@{'/admin/cars/delete/' + ${c.carId}}"
+                       onclick="return confirm('Удалить авто?')">Удалить</a>
+                </td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>

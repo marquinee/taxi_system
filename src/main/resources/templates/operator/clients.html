@@ -1,68 +1,63 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Клиенты</title></head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Клиенты</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
 <body>
+    <div class="container">
+        <div th:replace="fragments/header :: header"></div>
+        
+        <div class="nav-links">
+            <a th:href="@{/operator/dashboard}" class="btn btn-secondary">На главную</a>
+            <a th:href="@{/operator/clients/add}" class="btn btn-primary">Добавить клиента</a>
+        </div>
+        
+        <h2>Клиенты</h2>
 
-<div th:replace="fragments/header :: header"></div>
+        <!-- Форма поиска -->
+        <form method="get" action="/operator/clients" class="search-form">
+            <input type="text" name="search" th:value="${search}" placeholder="Поиск по ФИО или телефону...">
+            <button type="submit" class="btn btn-primary">Поиск</button>
+            <a th:href="@{/operator/clients}" class="btn btn-secondary">Сбросить</a>
+            
+            <label>Сортировать по:</label>
+            <select name="sortBy" onchange="this.form.submit()">
+                <option value="">-- Без сортировки --</option>
+                <option value="fullName" th:selected="${sortBy == 'fullName'}">ФИО</option>
+                <option value="registrationDate" th:selected="${sortBy == 'registrationDate'}">Дата регистрации</option>
+                <option value="phoneNumber" th:selected="${sortBy == 'phoneNumber'}">Телефон</option>
+            </select>
+            <select name="sortDir" onchange="this.form.submit()">
+                <option value="asc" th:selected="${sortDir == 'asc'}">По возрастанию</option>
+                <option value="desc" th:selected="${sortDir == 'desc'}">По убыванию</option>
+            </select>
+        </form>
 
-<h2>Клиенты</h2>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>ФИО</th>
+                <th>Телефон</th>
+                <th>Дата регистрации</th>
+                <th>Заметки</th>
+                <th>Действия</th>
+            </tr>
 
-<a th:href="@{/operator/clients/add}">Добавить клиента</a>
-<br><br>
-
-<!-- Форма поиска -->
-<form method="get" action="/operator/clients">
-    <input type="text" name="search" th:value="${search}" placeholder="Поиск по ФИО или телефону...">
-    <button type="submit">Поиск</button>
-    <a th:href="@{/operator/clients}">Сбросить</a>
-</form>
-
-<br>
-
-<!-- Сортировка -->
-<form method="get" action="/operator/clients" style="display: inline;">
-    <input type="hidden" name="search" th:value="${search}">
-    <label>Сортировать по:</label>
-    <select name="sortBy" onchange="this.form.submit()">
-        <option value="">-- Без сортировки --</option>
-        <option value="fullName" th:selected="${sortBy == 'fullName'}">ФИО</option>
-        <option value="registrationDate" th:selected="${sortBy == 'registrationDate'}">Дата регистрации</option>
-        <option value="phoneNumber" th:selected="${sortBy == 'phoneNumber'}">Телефон</option>
-    </select>
-    <select name="sortDir" onchange="this.form.submit()">
-        <option value="asc" th:selected="${sortDir == 'asc'}">По возрастанию</option>
-        <option value="desc" th:selected="${sortDir == 'desc'}">По убыванию</option>
-    </select>
-</form>
-
-<br><br>
-
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>ФИО</th>
-        <th>Телефон</th>
-        <th>Дата регистрации</th>
-        <th>Заметки</th>
-        <th>Действия</th>
-    </tr>
-
-    <tr th:each="c : ${clients}">
-        <td th:text="${c.clientId}"></td>
-        <td th:text="${c.fullName}"></td>
-        <td th:text="${c.phoneNumber}"></td>
-        <td th:text="${c.registrationDate}"></td>
-        <td th:text="${c.notes}"></td>
-        <td>
-            <a th:href="@{'/operator/clients/edit/' + ${c.clientId}}">Редактировать</a> |
-            <a th:href="@{'/operator/clients/deactivate/' + ${c.clientId}}"
-               onclick="return confirm('Добавить клиента в архив?')">В архив</a>
-        </td>
-    </tr>
-</table>
-
-<br>
-<a th:href="@{/operator/dashboard}">Назад</a>
-
+            <tr th:each="c : ${clients}">
+                <td th:text="${c.clientId}"></td>
+                <td th:text="${c.fullName}"></td>
+                <td th:text="${c.phoneNumber}"></td>
+                <td th:text="${c.registrationDate}"></td>
+                <td th:text="${c.notes}"></td>
+                <td class="action-buttons">
+                    <a th:href="@{'/operator/clients/edit/' + ${c.clientId}}">Редактировать</a>
+                    <a th:href="@{'/operator/clients/deactivate/' + ${c.clientId}}"
+                       onclick="return confirm('Добавить клиента в архив?')">В архив</a>
+                </td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>

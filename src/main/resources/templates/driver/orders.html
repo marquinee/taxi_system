@@ -1,46 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <h2>Мои заказы</h2>
+    <title>Мои заказы</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
-
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Откуда</th>
-        <th>Куда</th>
-        <th>Цена</th>
-        <th>Статус</th>
-        <th>Действия</th>
-    </tr>
-
-    <tr th:each="o : ${orders}">
-        <td th:text="${o.orderId}"></td>
-        <td th:text="${o.pickupAddress}"></td>
-        <td th:text="${o.destinationAddress}"></td>
-        <td th:text="${o.price}"></td>
-        <td th:text="${o.status}"></td>
-
-        <td>
-            <form th:if="${o.status.name() == 'ASSIGNED'}"
-                  th:action="@{'/driver/orders/' + ${o.orderId} + '/start'}"
-                  method="post">
-                <button type="submit">Начать</button>
-            </form>
-
-            <form th:if="${o.status.name() == 'IN_PROGRESS'}"
-                  th:action="@{'/driver/orders/' + ${o.orderId} + '/complete'}"
-                  method="post">
-                <button type="submit">Завершить</button>
-            </form>
-        </td>
-    </tr>
-
-</table>
-
 <body>
+    <div class="container">
+        <div th:replace="fragments/header :: header"></div>
+        
+        <div class="nav-links">
+            <a th:href="@{/driver/orders}" class="btn btn-secondary">На главную</a>
+        </div>
+        
+        <h2>Мои заказы</h2>
 
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Откуда</th>
+                <th>Куда</th>
+                <th>Цена</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+
+            <tr th:each="o : ${orders}">
+                <td th:text="${o.orderId}"></td>
+                <td th:text="${o.pickupAddress}"></td>
+                <td th:text="${o.destinationAddress}"></td>
+                <td th:text="${o.price}"></td>
+                <td th:text="${o.status}"></td>
+                <td class="action-buttons">
+                    <form th:if="${o.status.name() == 'ASSIGNED'}"
+                          th:action="@{'/driver/orders/' + ${o.orderId} + '/start'}"
+                          method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-primary">Начать</button>
+                    </form>
+
+                    <form th:if="${o.status.name() == 'IN_PROGRESS'}"
+                          th:action="@{'/driver/orders/' + ${o.orderId} + '/complete'}"
+                          method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-primary">Завершить</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>

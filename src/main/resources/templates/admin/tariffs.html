@@ -1,68 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Тарифы</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
-
 <body>
-<h2>Тарифы</h2>
+    <div class="container">
+        <div th:replace="fragments/header :: header"></div>
+        
+        <div class="nav-links">
+            <a th:href="@{/admin/dashboard}" class="btn btn-secondary">На главную</a>
+            <a th:href="@{/admin/tariffs/add}" class="btn btn-primary">Создать тариф</a>
+        </div>
+        
+        <h2>Тарифы</h2>
 
-<a th:href="@{/admin/tariffs/add}">Создать тариф</a>
+        <!-- Форма поиска -->
+        <form method="get" action="/admin/tariffs" class="search-form">
+            <input type="text" name="search" th:value="${search}" placeholder="Поиск по названию...">
+            <button type="submit" class="btn btn-primary">Поиск</button>
+            <a th:href="@{/admin/tariffs}" class="btn btn-secondary">Сбросить</a>
+            
+            <label>Сортировать по:</label>
+            <select name="sortBy" onchange="this.form.submit()">
+                <option value="">-- Без сортировки --</option>
+                <option value="name" th:selected="${sortBy == 'name'}">Название</option>
+                <option value="baseRate" th:selected="${sortBy == 'baseRate'}">Базовая ставка</option>
+                <option value="perKmRate" th:selected="${sortBy == 'perKmRate'}">Цена за км</option>
+            </select>
+            <select name="sortDir" onchange="this.form.submit()">
+                <option value="asc" th:selected="${sortDir == 'asc'}">По возрастанию</option>
+                <option value="desc" th:selected="${sortDir == 'desc'}">По убыванию</option>
+            </select>
+        </form>
 
-<br><br>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Базовая ставка</th>
+                <th>Цена за км</th>
+                <th>Активен</th>
+                <th>Действия</th>
+            </tr>
 
-<!-- Форма поиска -->
-<form method="get" action="/admin/tariffs">
-    <input type="text" name="search" th:value="${search}" placeholder="Поиск по названию...">
-    <button type="submit">Поиск</button>
-    <a th:href="@{/admin/tariffs}">Сбросить</a>
-</form>
-
-<br>
-
-<!-- Сортировка -->
-<form method="get" action="/admin/tariffs" style="display: inline;">
-    <input type="hidden" name="search" th:value="${search}">
-    <label>Сортировать по:</label>
-    <select name="sortBy" onchange="this.form.submit()">
-        <option value="">-- Без сортировки --</option>
-        <option value="name" th:selected="${sortBy == 'name'}">Название</option>
-        <option value="baseRate" th:selected="${sortBy == 'baseRate'}">Базовая ставка</option>
-        <option value="perKmRate" th:selected="${sortBy == 'perKmRate'}">Цена за км</option>
-    </select>
-    <select name="sortDir" onchange="this.form.submit()">
-        <option value="asc" th:selected="${sortDir == 'asc'}">По возрастанию</option>
-        <option value="desc" th:selected="${sortDir == 'desc'}">По убыванию</option>
-    </select>
-</form>
-
-<br><br>
-
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Название</th>
-        <th>Базовая ставка</th>
-        <th>Цена за км</th>
-        <th>Активен</th>
-        <th>Действия</th>
-    </tr>
-
-    <tr th:each="t : ${tariffs}">
-        <td th:text="${t.tariffId}"></td>
-        <td th:text="${t.name}"></td>
-        <td th:text="${t.baseRate}"></td>
-        <td th:text="${t.perKmRate}"></td>
-        <td th:text="${t.active}"></td>
-        <td>
-            <a th:href="@{'/admin/tariffs/edit/' + ${t.tariffId}}">Редактировать</a> |
-            <a th:href="@{'/admin/tariffs/delete/' + ${t.tariffId}}"
-               onclick="return confirm('Удалить тариф?')">Удалить</a>
-        </td>
-    </tr>
-</table>
-
+            <tr th:each="t : ${tariffs}">
+                <td th:text="${t.tariffId}"></td>
+                <td th:text="${t.name}"></td>
+                <td th:text="${t.baseRate}"></td>
+                <td th:text="${t.perKmRate}"></td>
+                <td th:text="${t.active}"></td>
+                <td class="action-buttons">
+                    <a th:href="@{'/admin/tariffs/edit/' + ${t.tariffId}}">Редактировать</a>
+                    <a th:href="@{'/admin/tariffs/delete/' + ${t.tariffId}}"
+                       onclick="return confirm('Удалить тариф?')">Удалить</a>
+                </td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>
