@@ -15,6 +15,25 @@
         
         <h2>Автомобили</h2>
 
+        <!-- Форма поиска -->
+        <form method="get" action="/operator/cars" class="search-form">
+            <input type="text" name="search" th:value="${search}" placeholder="Поиск по модели или госномеру...">
+            <button type="submit" class="btn btn-primary">Поиск</button>
+            <a th:href="@{/operator/cars}" class="btn btn-secondary">Сбросить</a>
+            
+            <label>Сортировать по:</label>
+            <select name="sortBy" onchange="this.form.submit()">
+                <option value="">-- Без сортировки --</option>
+                <option value="model" th:selected="${sortBy == 'model'}">Модель</option>
+                <option value="year" th:selected="${sortBy == 'year'}">Год</option>
+                <option value="licensePlate" th:selected="${sortBy == 'licensePlate'}">Госномер</option>
+            </select>
+            <select name="sortDir" onchange="this.form.submit()">
+                <option value="asc" th:selected="${sortDir == 'asc'}">По возрастанию</option>
+                <option value="desc" th:selected="${sortDir == 'desc'}">По убыванию</option>
+            </select>
+        </form>
+
         <table>
             <tr>
                 <th>ID</th>

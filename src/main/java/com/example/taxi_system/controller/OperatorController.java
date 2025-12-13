@@ -1,15 +1,11 @@
 package com.example.taxi_system.controller;
 
-import com.example.taxi_system.entity.Client;
-import com.example.taxi_system.entity.Order;
-import com.example.taxi_system.entity.OrderStatus;
 import com.example.taxi_system.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.Scanner;
+import java.util.List;
 
 @Controller
 @RequestMapping("/operator")
@@ -35,14 +31,38 @@ public class OperatorController {
         this.statisticsService = statisticsService;
     }
     @GetMapping("/cars")
-    public String cars(Model model) {
-        model.addAttribute("cars", carService.findAll());
+    public String cars(@RequestParam(required = false) String search,
+                       @RequestParam(required = false) String sortBy,
+                       @RequestParam(required = false, defaultValue = "asc") String sortDir,
+                       Model model) {
+        List<com.example.taxi_system.entity.Car> cars;
+        if (search != null && !search.trim().isEmpty()) {
+            cars = carService.searchAndSort(search.trim(), sortBy, sortDir);
+        } else {
+            cars = carService.sort(carService.findAll(), sortBy, sortDir);
+        }
+        model.addAttribute("cars", cars);
+        model.addAttribute("search", search);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("sortDir", sortDir);
         return "operator/cars";
     }
 
     @GetMapping("/tariffs")
-    public String tariffs(Model model) {
-        model.addAttribute("tariffs", tariffService.findActive());
+    public String tariffs(@RequestParam(required = false) String search,
+                          @RequestParam(required = false) String sortBy,
+                          @RequestParam(required = false, defaultValue = "asc") String sortDir,
+                          Model model) {
+        List<com.example.taxi_system.entity.Tariff> tariffs;
+        if (search != null && !search.trim().isEmpty()) {
+            tariffs = tariffService.searchAndSort(search.trim(), sortBy, sortDir);
+        } else {
+            tariffs = tariffService.sort(tariffService.findActive(), sortBy, sortDir);
+        }
+        model.addAttribute("tariffs", tariffs);
+        model.addAttribute("search", search);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("sortDir", sortDir);
         return "operator/tariffs";
     }
 
