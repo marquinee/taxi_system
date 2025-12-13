@@ -16,25 +16,31 @@
         
         <h2 th:text="${client.clientId == null ? 'Добавить клиента' : 'Редактировать клиента'}"></h2>
 
+        <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+        
         <form th:action="@{${actionUrl}}" th:object="${client}" method="post">
             <div class="form-group">
                 <label>ФИО:</label>
-                <input type="text" th:field="*{fullName}" required>
+                <input type="text" th:field="*{fullName}" th:classappend="${#fields.hasErrors('fullName')} ? 'error'" required>
+                <span class="form-error" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></span>
             </div>
 
             <div class="form-group">
                 <label>Телефон:</label>
-                <input type="text" th:field="*{phoneNumber}" required>
+                <input type="text" th:field="*{phoneNumber}" th:classappend="${#fields.hasErrors('phoneNumber')} ? 'error'" required>
+                <span class="form-error" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></span>
             </div>
 
             <div class="form-group">
                 <label>Дата регистрации:</label>
-                <input type="date" th:field="*{registrationDate}">
+                <input type="date" th:field="*{registrationDate}" th:classappend="${#fields.hasErrors('registrationDate')} ? 'error'">
+                <span class="form-error" th:if="${#fields.hasErrors('registrationDate')}" th:errors="*{registrationDate}"></span>
             </div>
 
             <div class="form-group">
                 <label>Заметки:</label>
-                <input type="text" th:field="*{notes}">
+                <input type="text" th:field="*{notes}" th:classappend="${#fields.hasErrors('notes')} ? 'error'">
+                <span class="form-error" th:if="${#fields.hasErrors('notes')}" th:errors="*{notes}"></span>
             </div>
 
             <button type="submit" class="btn btn-primary">Сохранить</button>

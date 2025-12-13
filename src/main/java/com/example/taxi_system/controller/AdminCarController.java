@@ -61,39 +61,53 @@ public class AdminCarController {
 
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable Long id, Model model) {
-        Car car = carService.findById(id);
-
-        model.addAttribute("car", car);
-        model.addAttribute("drivers", driverService.findAll());
-        model.addAttribute("actionUrl", "/admin/cars/edit/" + id);
-        return "admin/car-form";
+        try {
+            Car car = carService.findById(id);
+            model.addAttribute("car", car);
+            model.addAttribute("drivers", driverService.findAll());
+            model.addAttribute("actionUrl", "/admin/cars/edit/" + id);
+            return "admin/car-form";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Автомобиль с ID " + id + " не найден.");
+            return "redirect:/admin/cars";
+        }
     }
 
     @PostMapping("/edit/{id}")
     public String edit(@PathVariable Long id,
                        @ModelAttribute Car updated,
-                       @RequestParam(required = false) Long driverId) {
+                       @RequestParam(required = false) Long driverId,
+                       Model model) {
+        try {
+            Car car = carService.findById(id);
 
-        Car car = carService.findById(id);
+            car.setModel(updated.getModel());
+            car.setYear(updated.getYear());
+            car.setLicensePlate(updated.getLicensePlate());
 
-        car.setModel(updated.getModel());
-        car.setYear(updated.getYear());
-        car.setLicensePlate(updated.getLicensePlate());
+            if (driverId != null) {
+                car.setDriver(driverService.findById(driverId));
+            } else {
+                car.setDriver(null);
+            }
 
-        if (driverId != null) {
-            car.setDriver(driverService.findById(driverId));
-        } else {
-            car.setDriver(null);
+            carService.save(car);
+            return "redirect:/admin/cars";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Ошибка при обновлении автомобиля: " + e.getMessage());
+            return "redirect:/admin/cars";
         }
-
-        carService.save(car);
-        return "redirect:/admin/cars";
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Long id) {
-        carService.deleteById(id);
-        return "redirect:/admin/cars";
+    public String delete(@PathVariable Long id, Model model) {
+        try {
+            carService.deleteById(id);
+            return "redirect:/admin/cars";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Ошибка при удалении автомобиля: " + e.getMessage());
+            return "redirect:/admin/cars";
+        }
     }
 }
 

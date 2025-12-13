@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ошибка</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="error-page">
+            <div class="error-icon">❌</div>
+            <h1 class="error-code" th:text="${errorCode}">Ошибка</h1>
+            <h2 class="error-title" th:text="${errorTitle}">Произошла ошибка</h2>
+            <p class="error-message" th:text="${errorMessage}">Что-то пошло не так. Пожалуйста, попробуйте позже.</p>
+            <p class="error-suggestion" th:text="${errorSuggestion}">Вернитесь на главную страницу или попробуйте обновить страницу.</p>
+            <div class="error-actions">
+                <a th:href="@{/login}" class="btn btn-primary">На страницу входа</a>
+                <a href="javascript:history.back()" class="btn btn-secondary">Назад</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

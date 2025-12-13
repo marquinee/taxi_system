@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Об авторе</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="about-page">
+            <h2>Об авторе</h2>
+            
+            <div class="about-section">
+                <div class="about-item">
+                    <strong>ФИО:</strong>
+                    <span th:text="${fullName}">Фомина Марина Александровна</span>
+                </div>
+
+                <div class="about-item">
+                    <strong>Учебное заведение:</strong>
+                    <span th:text="${group}">Финансовый университет при Правительстве РФ</span>
+                </div>
+
+                <div class="about-item">
+                    <strong>Группа:</strong>
+                    <span th:text="${group}">ПИ23-1</span>
+                </div>
+                
+                <div class="about-item">
+                    <strong>Контактные данные:</strong>
+                    <span th:text="${contactInfo}">marinall11xx@gmail.com</span>
+                </div>
+                
+                <div class="about-item">
+                    <strong>Опыт работы с технологиями:</strong>
+                    <p th:text="${experience}">В ходе выполнения проекта я получила практический опыт разработки серверной части на Java с использованием Spring Boot, а также работы с PostgreSQL, ORM (JPA/Hibernate) и шаблонизатором Thymeleaf для создания клиентского веб-интерфейса. В рамках проекта были реализованы многослойная архитектура, ролевая модель доступа, CRUD-операции, поиск, сортировка и бизнес-логика предметной области службы такси.</p>
+                </div>
+                
+                <div class="about-item">
+                    <strong>Дата начала работ:</strong>
+                    <span th:text="${startDate}">30.10.2025</span>
+                </div>
+                
+                <div class="about-item">
+                    <strong>Дата завершения работ:</strong>
+                    <span th:text="${endDate}">14.12.2025</span>
+                </div>
+            </div>
+            
+            <div class="about-actions">
+                <a th:href="@{/login}" class="btn btn-primary">Вернуться на страницу входа</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

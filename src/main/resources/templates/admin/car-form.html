@@ -16,20 +16,25 @@
         
         <h2 th:text="${car.carId == null ? 'Добавить авто' : 'Редактировать авто'}"></h2>
 
+        <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+        
         <form th:action="@{${actionUrl}}" th:object="${car}" method="post">
             <div class="form-group">
                 <label>Модель:</label>
-                <input type="text" th:field="*{model}" required>
+                <input type="text" th:field="*{model}" th:classappend="${#fields.hasErrors('model')} ? 'error'" required>
+                <span class="form-error" th:if="${#fields.hasErrors('model')}" th:errors="*{model}"></span>
             </div>
 
             <div class="form-group">
                 <label>Госномер:</label>
-                <input type="text" th:field="*{licensePlate}" required>
+                <input type="text" th:field="*{licensePlate}" th:classappend="${#fields.hasErrors('licensePlate')} ? 'error'" required>
+                <span class="form-error" th:if="${#fields.hasErrors('licensePlate')}" th:errors="*{licensePlate}"></span>
             </div>
 
             <div class="form-group">
                 <label>Год:</label>
-                <input type="number" th:field="*{year}" required>
+                <input type="number" th:field="*{year}" th:classappend="${#fields.hasErrors('year')} ? 'error'" required min="1900" max="2100">
+                <span class="form-error" th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></span>
             </div>
 
             <div class="form-group">
