@@ -59,9 +59,13 @@
                 <td th:text="${#temporals.format(o.createdAt, 'dd.MM.yyyy HH:mm')}"></td>
                 <td class="action-buttons">
                     <!-- Назначить водителя -->
-                    <a th:if="${o.status.name() == 'NEW'}"
-                       th:href="@{'/operator/orders/edit/' + ${o.orderId}}"
-                       class="btn btn-primary">Назначить</a>
+                    <form th:if="${o.status.name() == 'NEW'}"
+                          th:action="@{'/operator/orders/edit/' + ${o.orderId}}"
+                          method="get" style="display: inline;">
+                        <button type="submit" class="btn btn-primary">
+                            Назначить
+                        </button>
+                    </form>
 
                     <!-- Начать поездку -->
                     <form th:if="${o.status.name() == 'ASSIGNED'}"
